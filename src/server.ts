@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { config } from "./config.js";
@@ -32,29 +33,38 @@ app.get("/health", healthHandler);
 app.get("/ping", healthHandler);
 app.get("/api/health", healthHandler);
 
-// ── Anti-Spam & Rate-Limiting Protection State ──
-interface RateLimitRecord {
-  count: number;
+// ── 1. Industry Standard Middleware: express-rate-limit ──
+// Limits each IP to max 10 requests per 15 minutes across API endpoints
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests from this IP. Please try again after 15 minutes." },
+});
+
+// Strict intake limiter: Max 3 submissions per 3 minutes per IP
+const intakeLimiter = rateLimit({
+  windowMs: 3 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Submission rate limit reached for this IP. Please wait 3 minutes before submitting again." },
+});
+
+// ── 2. Device Fingerprint & Content Deduplication Layers ──
+interface DeviceRecord {
   lastSubmissionMs: number;
 }
-
-const deviceSubmissions = new Map<string, RateLimitRecord>();
-const ipSubmissions = new Map<string, RateLimitRecord>();
+const deviceSubmissions = new Map<string, DeviceRecord>();
 const recentMessages = new Set<string>();
-
-// Cooldown window: 30 seconds per device/IP (prevents rapid automated AI API spamming while allowing judging demos)
-const SPAM_COOLDOWN_MS = 30 * 1000; 
+const DEVICE_COOLDOWN_MS = 30 * 1000;
 
 function cleanStaleLimits() {
   const now = Date.now();
   for (const [key, record] of deviceSubmissions.entries()) {
-    if (now - record.lastSubmissionMs > SPAM_COOLDOWN_MS * 4) {
+    if (now - record.lastSubmissionMs > DEVICE_COOLDOWN_MS * 4) {
       deviceSubmissions.delete(key);
-    }
-  }
-  for (const [key, record] of ipSubmissions.entries()) {
-    if (now - record.lastSubmissionMs > SPAM_COOLDOWN_MS * 4) {
-      ipSubmissions.delete(key);
     }
   }
 }
@@ -64,10 +74,11 @@ const ComplaintInput = z.object({
   customer_name: z.string().min(1, "Customer name is required"),
   customer_email: z.string().email("Valid email is required"),
   raw_message: z.string().min(1, "Complaint message cannot be empty"),
-  website_url: z.string().optional(), // Honeypot field for bot trapping
+  website_url: z.string().optional(), // Bot honeypot field
 });
 
-app.post("/api/complaints", async (req, res) => {
+// Apply standard intake rate limiter + custom device fingerprinting
+app.post("/api/complaints", intakeLimiter, async (req, res) => {
   const result = ComplaintInput.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: "Validation failed", details: result.error.issues });
@@ -75,55 +86,42 @@ app.post("/api/complaints", async (req, res) => {
 
   const { customer_name, customer_email, raw_message, website_url } = result.data;
 
-  // 1. Bot Trap Honeypot Check: Automated spam bots fill hidden inputs
+  // Bot Trap: Automated spam scripts fill invisible inputs
   if (website_url && website_url.trim() !== "") {
     console.warn("🛡️ Spam bot trapped via honeypot field. Submission rejected.");
     return res.status(429).json({ error: "Spam detected. Automated submissions are blocked." });
   }
 
-  // 2. Client Device ID & IP Tracking
-  const clientIp = (req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "unknown-ip").split(",")[0].trim();
+  // Device Fingerprint Rate Limiting
   const deviceId = (req.headers["x-device-id"] as string || "unknown-device").trim();
   const now = Date.now();
-
-  const ipRecord = ipSubmissions.get(clientIp);
   const deviceRecord = deviceSubmissions.get(deviceId);
 
-  if (ipRecord && now - ipRecord.lastSubmissionMs < SPAM_COOLDOWN_MS) {
-    const remainingSec = Math.ceil((SPAM_COOLDOWN_MS - (now - ipRecord.lastSubmissionMs)) / 1000);
+  if (deviceId !== "unknown-device" && deviceRecord && now - deviceRecord.lastSubmissionMs < DEVICE_COOLDOWN_MS) {
+    const remainingSec = Math.ceil((DEVICE_COOLDOWN_MS - (now - deviceRecord.lastSubmissionMs)) / 1000);
     return res.status(429).json({
-      error: `Anti-spam cooldown active. Please wait ${remainingSec} seconds before submitting again to protect AI quota.`,
+      error: `Device limit active. Please wait ${remainingSec} seconds before submitting again on this device.`,
       cooldownSeconds: remainingSec,
     });
   }
 
-  if (deviceId !== "unknown-device" && deviceRecord && now - deviceRecord.lastSubmissionMs < SPAM_COOLDOWN_MS) {
-    const remainingSec = Math.ceil((SPAM_COOLDOWN_MS - (now - deviceRecord.lastSubmissionMs)) / 1000);
-    return res.status(429).json({
-      error: `Device submission limit active. Please wait ${remainingSec} seconds before submitting again.`,
-      cooldownSeconds: remainingSec,
-    });
-  }
-
-  // 3. Message Content Deduplication (Prevents repeating exact same spam text)
+  // Content Deduplication (Prevents repeating exact same text)
   const messageHash = `${customer_email.toLowerCase()}:${raw_message.trim().toLowerCase()}`;
   if (recentMessages.has(messageHash)) {
-    return res.status(429).json({ error: "Duplicate complaint detected. This exact submission was recently received." });
+    return res.status(429).json({ error: "Duplicate complaint detected. This exact text was recently submitted." });
   }
 
   try {
     const complaint = await createComplaint({ customer_name, customer_email, raw_message });
     
-    // Record rate limit state
-    ipSubmissions.set(clientIp, { count: (ipRecord?.count || 0) + 1, lastSubmissionMs: now });
     if (deviceId !== "unknown-device") {
-      deviceSubmissions.set(deviceId, { count: (deviceRecord?.count || 0) + 1, lastSubmissionMs: now });
+      deviceSubmissions.set(deviceId, { lastSubmissionMs: now });
     }
     
-    // Track message hash for 5 minutes
     recentMessages.add(messageHash);
     setTimeout(() => recentMessages.delete(messageHash), 300000);
 
+    const clientIp = (req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "unknown-ip").split(",")[0].trim();
     await logAuditEvent(complaint.id, "received", `Complaint received from ${clientIp} [Device: ${deviceId.substring(0, 8)}]`);
     await complaintQueue.add("process-complaint", { complaintId: complaint.id }, { jobId: complaint.id });
     
@@ -147,7 +145,7 @@ app.get("/api/complaints/:id", async (req, res) => {
   }
 });
 
-app.get("/api/complaints", async (req, res) => {
+app.get("/api/complaints", apiLimiter, async (req, res) => {
   try {
     const complaints = await listComplaints();
     res.status(200).json(complaints);
