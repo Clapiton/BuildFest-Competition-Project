@@ -7,7 +7,7 @@ An end-to-end AI-powered workflow that receives customer complaints, classifies 
 
 ## 🔗 Live Demo
 
-> **[complaint-automation.onrender.com](https://complaint-automation.onrender.com)** *(link updated after deployment)*
+> **[buildfest-competition-project.onrender.com](https://buildfest-competition-project.onrender.com/)**
 
 ---
 
