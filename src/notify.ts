@@ -37,24 +37,25 @@ export async function notifyCustomer(email: string, draftReply: string): Promise
         }
         console.error("Resend API error:", error);
       } catch (err) {
-        console.error("Resend error, falling back:", err);
+        console.error("Resend error, falling back to SMTP/console:", err);
       }
     }
 
-    // 2. Try SMTP if notificationMode is email
-    if (config.notificationMode === "email") {
+    // 2. Try SMTP if SMTP_HOST is configured or notificationMode is "email"
+    if (config.smtpHost || config.notificationMode === "email") {
       try {
         const transporter = getTransporter();
+        const senderAddress = config.smtpUser ? `"Support Team" <${config.smtpUser}>` : `"Support Team" <support@example.com>`;
         await transporter.sendMail({
-          from: `"Support Team" <${config.smtpUser || "support@example.com"}>`,
+          from: senderAddress,
           to: email,
           subject: "We've received your complaint",
           text: draftReply,
         });
         console.log(`✉️ [SMTP EMAIL] Sent acknowledgment email to ${email}`);
         return;
-      } catch (emailError) {
-        console.error("Email failed, falling back to console logging:", emailError);
+      } catch (emailError: any) {
+        console.error("⚠️ SMTP Email delivery failed:", emailError.message || emailError);
       }
     }
 
@@ -88,23 +89,24 @@ export async function notifyTeamMember(assignee: string, complaint: { id: string
         }
         console.error("Resend API error:", error);
       } catch (err) {
-        console.error("Resend error, falling back:", err);
+        console.error("Resend error, falling back to SMTP/console:", err);
       }
     }
 
-    if (config.notificationMode === "email") {
+    if (config.smtpHost || config.notificationMode === "email") {
       try {
         const transporter = getTransporter();
+        const senderAddress = config.smtpUser ? `"Support System" <${config.smtpUser}>` : `"Support System" <system@example.com>`;
         await transporter.sendMail({
-          from: `"Support System" <${config.smtpUser || "system@example.com"}>`,
+          from: senderAddress,
           to: assignee,
           subject: `New complaint assigned: ${complaint.id.substring(0, 8)}`,
           text: textContent,
         });
         console.log(`✉️ [SMTP EMAIL] Sent assignment email to ${assignee}`);
         return;
-      } catch (emailError) {
-        console.error("Email failed, falling back to console logging:", emailError);
+      } catch (emailError: any) {
+        console.error("⚠️ SMTP Email delivery failed:", emailError.message || emailError);
       }
     }
 
@@ -140,23 +142,24 @@ export async function notifyEscalation(complaint: { id: string; customer_name: s
         }
         console.error("Resend API error:", error);
       } catch (err) {
-        console.error("Resend error, falling back:", err);
+        console.error("Resend error, falling back to SMTP/console:", err);
       }
     }
 
-    if (config.notificationMode === "email") {
+    if (config.smtpHost || config.notificationMode === "email") {
       try {
         const transporter = getTransporter();
+        const senderAddress = config.smtpUser ? `"Support System" <${config.smtpUser}>` : `"Support System" <system@example.com>`;
         await transporter.sendMail({
-          from: `"Support System" <${config.smtpUser || "system@example.com"}>`,
+          from: senderAddress,
           to,
           subject: `🚨 ESCALATED: Complaint ${complaint.id.substring(0, 8)}`,
           text: textContent,
         });
         console.log(`✉️ [SMTP EMAIL] Sent escalation alert to ${to}`);
         return;
-      } catch (emailError) {
-        console.error("Email failed, falling back to console logging:", emailError);
+      } catch (emailError: any) {
+        console.error("⚠️ SMTP Email delivery failed:", emailError.message || emailError);
       }
     }
 
@@ -214,11 +217,12 @@ export async function notifyCustomerStatusUpdate(
       }
     }
 
-    if (config.notificationMode === "email") {
+    if (config.smtpHost || config.notificationMode === "email") {
       try {
         const transporter = getTransporter();
+        const senderAddress = config.smtpUser ? `"Support Team" <${config.smtpUser}>` : `"Support Team" <support@example.com>`;
         await transporter.sendMail({
-          from: `"Support Team" <${config.smtpUser || "support@example.com"}>`,
+          from: senderAddress,
           to: email,
           subject,
           text,
@@ -226,8 +230,8 @@ export async function notifyCustomerStatusUpdate(
         const msg = `✉️ [SMTP EMAIL] Sent ${status} update to customer ${email}`;
         console.log(msg);
         return `Delivered via SMTP to ${email}`;
-      } catch (emailError) {
-        console.error("Email failed, falling back to console logging:", emailError);
+      } catch (emailError: any) {
+        console.error("⚠️ SMTP Email delivery failed:", emailError.message || emailError);
       }
     }
 
