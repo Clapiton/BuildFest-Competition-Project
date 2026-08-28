@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS complaints (
 );
 
 -- Audit log: records every workflow event for traceability
+-- Audit log: records every workflow event for traceability
+-- Protected with ON DELETE RESTRICT to guarantee audit log immutability (M5)
 CREATE TABLE IF NOT EXISTS audit_log (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  complaint_id   UUID NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
+  complaint_id   UUID NOT NULL REFERENCES complaints(id) ON DELETE RESTRICT,
   event          TEXT NOT NULL,  -- received, classified, assigned, escalated, resolved
   detail         TEXT,           -- free-text description of what happened
   created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -33,27 +35,32 @@ CREATE INDEX IF NOT EXISTS idx_complaints_status ON complaints(status);
 -- Index for audit log lookups by complaint
 CREATE INDEX IF NOT EXISTS idx_audit_log_complaint_id ON audit_log(complaint_id);
 
--- Row Level Security (RLS)
--- RLS is enabled by default on Supabase tables.
+-- Row Level Security (RLS) Hardened (C2 & M5)
 -- The backend uses the service_role key which bypasses RLS.
--- These policies provide defense-in-depth for any direct client access.
+-- Anonymous/direct client access is restricted.
 
 ALTER TABLE complaints ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
 
--- Policies for complaints table
-CREATE POLICY "Allow public insert on complaints" ON complaints
-  FOR INSERT WITH CHECK (true);
+-- 1. Service role full access
+CREATE POLICY "Service role full access on complaints" ON complaints
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 
-CREATE POLICY "Allow public select on complaints" ON complaints
-  FOR SELECT USING (true);
+CREATE POLICY "Service role full access on audit_log" ON audit_log
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 
-CREATE POLICY "Allow service update on complaints" ON complaints
-  FOR UPDATE USING (true) WITH CHECK (true);
+-- 2. Authenticated team members via Supabase Auth
+CREATE POLICY "Authenticated users can view complaints" ON complaints
+  FOR SELECT TO authenticated USING (true);
 
--- Policies for audit_log table
-CREATE POLICY "Allow public insert on audit_log" ON audit_log
-  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Authenticated users can update complaints" ON complaints
+  FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "Allow public select on audit_log" ON audit_log
-  FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can view audit_log" ON audit_log
+  FOR SELECT TO authenticated USING (true);
+
+-- 3. Anonymous/Public access: only INSERT allowed on complaints with status 'received'
+CREATE POLICY "Public can only insert received complaints" ON complaints
+  FOR INSERT TO anon WITH CHECK (status = 'received');
+
+-- (No SELECT, UPDATE, or DELETE permitted for anonymous clients on either table)

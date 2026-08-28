@@ -25,7 +25,15 @@ export interface AuditLogEntry {
   created_at: string;
 }
 
-export const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+export const supabase = createClient(config.supabaseUrl, config.supabaseServiceRoleKey);
+
+export interface PaginatedComplaints {
+  complaints: Complaint[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
 export async function createComplaint(data: { customer_name: string; customer_email: string; raw_message: string }): Promise<Complaint> {
   const { data: created, error } = await supabase
@@ -35,7 +43,8 @@ export async function createComplaint(data: { customer_name: string; customer_em
     .single();
 
   if (error) {
-    throw new Error(`Failed to create complaint: ${error.message}`);
+    console.error("[DB Error] createComplaint:", error);
+    throw new Error("Unable to create complaint record");
   }
   return created as Complaint;
 }
@@ -48,21 +57,44 @@ export async function getComplaint(id: string): Promise<Complaint | null> {
     .single();
 
   if (error && error.code !== "PGRST116") { // 0 rows error
-    throw new Error(`Failed to get complaint: ${error.message}`);
+    console.error("[DB Error] getComplaint:", error);
+    throw new Error("Unable to retrieve complaint record");
   }
   return (data as Complaint) || null;
 }
 
-export async function listComplaints(): Promise<Complaint[]> {
-  const { data, error } = await supabase
+export async function listComplaints(options: { page?: number; limit?: number; status?: string } = {}): Promise<PaginatedComplaints> {
+  const page = Math.max(1, options.page || 1);
+  const limit = Math.min(100, Math.max(1, options.limit || 25));
+  const offset = (page - 1) * limit;
+
+  let query = supabase
     .from("complaints")
-    .select()
-    .order("created_at", { ascending: false });
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (options.status) {
+    query = query.eq("status", options.status);
+  }
+
+  const { data, count, error } = await query;
 
   if (error) {
-    throw new Error(`Failed to list complaints: ${error.message}`);
+    console.error("[DB Error] listComplaints:", error);
+    throw new Error("Unable to list complaints");
   }
-  return data as Complaint[];
+
+  const total = count ?? (data?.length || 0);
+  const totalPages = Math.ceil(total / limit) || 1;
+
+  return {
+    complaints: (data as Complaint[]) || [],
+    total,
+    page,
+    limit,
+    totalPages,
+  };
 }
 
 export async function updateComplaint(id: string, fields: Partial<Omit<Complaint, 'id' | 'created_at'>>): Promise<Complaint> {
@@ -75,7 +107,8 @@ export async function updateComplaint(id: string, fields: Partial<Omit<Complaint
     .single();
 
   if (error) {
-    throw new Error(`Failed to update complaint: ${error.message}`);
+    console.error("[DB Error] updateComplaint:", error);
+    throw new Error("Unable to update complaint record");
   }
   return data as Complaint;
 }
@@ -86,7 +119,8 @@ export async function logAuditEvent(complaintId: string, event: string, detail?:
     .insert({ complaint_id: complaintId, event, detail: detail || null });
 
   if (error) {
-    throw new Error(`Failed to log audit event: ${error.message}`);
+    console.error("[DB Error] logAuditEvent:", error);
+    throw new Error("Unable to record audit log entry");
   }
 }
 
@@ -98,7 +132,8 @@ export async function getAuditLogs(complaintId: string): Promise<AuditLogEntry[]
     .order("created_at", { ascending: true });
 
   if (error) {
-    throw new Error(`Failed to fetch audit log: ${error.message}`);
+    console.error("[DB Error] getAuditLogs:", error);
+    throw new Error("Unable to retrieve audit logs");
   }
   return data as AuditLogEntry[];
 }
