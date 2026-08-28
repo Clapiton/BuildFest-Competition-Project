@@ -18,12 +18,12 @@ An end-to-end AI-powered workflow that receives customer complaints, classifies 
 ### 1. Complaint Intake Portal & Confirmation
 | Public Intake Form (Light Theme) | Complaint Enqueued Confirmation |
 |:---:|:---:|
-| ![Public Intake Form](formIntakewhite.png) | ![Complaint Enqueued Confirmation](formIntakewhitesubmission.png) |
+| ![Public Intake Form](assets/formIntakewhite.png) | ![Complaint Enqueued Confirmation](assets/formIntakewhitesubmission.png) |
 
 ### 2. Operational Triage Dashboard
 | Interactive Dashboard (Light Theme) | Interactive Dashboard (Dark Theme) |
 |:---:|:---:|
-| ![Dashboard Light Mode](statuslight.png) | ![Dashboard Dark Mode](status.png) |
+| ![Dashboard Light Mode](assets/statuslight.png) | ![Dashboard Dark Mode](assets/status.png) |
 
 ---
 
