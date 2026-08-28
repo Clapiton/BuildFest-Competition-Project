@@ -13,6 +13,20 @@ An end-to-end AI-powered workflow that receives customer complaints, classifies 
 
 ---
 
+## 📸 User Interface Showcase
+
+### 1. Complaint Intake Portal & Confirmation
+| Public Intake Form (Light Theme) | Complaint Enqueued Confirmation |
+|:---:|:---:|
+| ![Public Intake Form](formIntakewhite.png) | ![Complaint Enqueued Confirmation](formIntakewhitesubmission.png) |
+
+### 2. Operational Triage Dashboard
+| Interactive Dashboard (Light Theme) | Interactive Dashboard (Dark Theme) |
+|:---:|:---:|
+| ![Dashboard Light Mode](statuslight.png) | ![Dashboard Dark Mode](status.png) |
+
+---
+
 ## 📋 Problem Statement
 
 Support teams handling customer complaints by email and spreadsheet lose time on manual triage, and complaints often sit unresolved with no automatic follow-up, leading to missed SLAs and frustrated customers.
