@@ -5,9 +5,10 @@
 
 An end-to-end AI-powered workflow that receives customer complaints, classifies them using OpenAI, routes them to the right team member, sends transactional email notifications via **Resend**, tracks status in real time, and automatically escalates unresolved cases.
 
-## 🔗 Live Demo
+## 🔗 Live Demo Links
 
-> **[buildfest-competition-project.onrender.com](https://buildfest-competition-project.onrender.com/)**
+- 📥 **Public Complaint Intake Form**: [buildfest-competition-project.onrender.com](https://buildfest-competition-project.onrender.com/)
+- 💻 **Interactive Management Dashboard**: [buildfest-competition-project.onrender.com/status.html](https://buildfest-competition-project.onrender.com/status.html)
 
 ---
 
@@ -104,7 +105,7 @@ The app will be running at `http://localhost:3000`.
 
 ---
 
-## 💻 Interactive Dashboard Features (`/status.html`)
+## 💻 Interactive Dashboard Features ([`/status.html`](https://buildfest-competition-project.onrender.com/status.html))
 
 - **Real-Time Tracking**: Auto-refreshes complaint status every 10 seconds.
 - **Expandable Complaint Details**: Click any row to expand a drawer showing the **Raw Message**, **AI Summary**, and **Generated Customer Reply**.
