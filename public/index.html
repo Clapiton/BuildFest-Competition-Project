@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Complaint Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #2563eb; --primary-hover: #1d4ed8; --bg: #f3f4f6; --text: #1f2937; --text-light: #6b7280; --error: #ef4444; --error-bg: #fee2e2; --success: #10b981; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .card { background: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); width: 100%; max-width: 600px; padding: 2rem; box-sizing: border-box; transition: transform 0.2s, box-shadow 0.2s; }
+        .text-center { text-align: center; }
+        h1 { margin: 0 0 0.5rem; font-size: 1.5rem; font-weight: 600; }
+        p.subtitle { color: var(--text-light); margin: 0 0 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        input, textarea { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit; font-size: 1rem; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        textarea { resize: vertical; min-height: 120px; }
+        button { background-color: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 500; border-radius: 0.5rem; cursor: pointer; width: 100%; transition: background-color 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+        button:hover { background-color: var(--primary-hover); }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .error-banner { background-color: var(--error-bg); color: var(--error); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem; display: none; }
+        .spinner { width: 1.25rem; height: 1.25rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #success-state { display: none; text-align: center; }
+        .success-icon { font-size: 4rem; color: var(--success); margin-bottom: 1rem; }
+        .complaint-id { background: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: monospace; font-size: 1.125rem; font-weight: 600; display: inline-block; margin: 1rem 0; letter-spacing: 1px;}
+        .status-link { color: var(--primary); text-decoration: none; font-weight: 500; display: inline-block; margin: 1.5rem 0; }
+        .status-link:hover { text-decoration: underline; }
+        .btn-outline { background: white; color: var(--text); border: 1px solid #d1d5db; }
+        .btn-outline:hover { background: #f9fafb; }
+    </style>
+</head>
+<body>
+    <div class="card" id="main-card">
+        <div id="form-state">
+            <div class="text-center">
+                <h1>Customer Complaint Portal</h1>
+                <p class="subtitle">Submit your complaint and we'll handle it promptly</p>
+            </div>
+            <div id="error-banner" class="error-banner"></div>
+            <form id="complaint-form">
+                <div class="form-group">
+                    <label for="name">Customer Name</label>
+                    <input type="text" id="name" name="customer_name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="customer_email" required placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="complaint">Your Complaint</label>
+                    <textarea id="complaint" name="raw_message" required minlength="10" placeholder="Please describe your issue in detail..."></textarea>
+                </div>
+                <button type="submit" id="submit-btn">
+                    <span id="btn-text">Submit Complaint</span>
+                    <div class="spinner" id="btn-spinner"></div>
+                </button>
+            </form>
+        </div>
+
+        <div id="success-state">
+            <div class="success-icon">✅</div>
+            <h1>Complaint Submitted Successfully!</h1>
+            <div class="complaint-id">ID: <span id="display-id"></span></div>
+            <p style="color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.5;">We've received your complaint and our AI system is processing it now. You'll receive an acknowledgment shortly.</p>
+            <a href="status.html" class="status-link">View complaint status →</a>
+            <button type="button" class="btn-outline" onclick="resetForm()">Submit another complaint</button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('complaint-form');
+        const errorBanner = document.getElementById('error-banner');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const formState = document.getElementById('form-state');
+        const successState = document.getElementById('success-state');
+        const displayId = document.getElementById('display-id');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorBanner.style.display = 'none';
+            submitBtn.disabled = true;
+            btnText.textContent = 'Submitting...';
+            btnSpinner.style.display = 'block';
+
+            const formData = {
+                customer_name: document.getElementById('name').value,
+                customer_email: document.getElementById('email').value,
+                raw_message: document.getElementById('complaint').value
+            };
+
+            try {
+                const response = await fetch('/api/complaints', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                let data;
+                try { data = await response.json(); } catch(err) {}
+
+                if (!response.ok) {
+                    throw new Error((data && data.message) || `Server error (${response.status})`);
+                }
+
+                // Success
+                formState.style.display = 'none';
+                successState.style.display = 'block';
+                
+                const id = (data && data.complaint && data.complaint.id) ? data.complaint.id : crypto.randomUUID();
+                displayId.textContent = id.substring(0, 8);
+                
+            } catch (error) {
+                errorBanner.textContent = error.message || 'An error occurred while submitting your complaint.';
+                errorBanner.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Submit Complaint';
+                btnSpinner.style.display = 'none';
+            }
+        });
+
+        function resetForm() {
+            form.reset();
+            successState.style.display = 'none';
+            formState.style.display = 'block';
+            errorBanner.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

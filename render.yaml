@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: complaint-automation
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: NOTIFICATION_MODE
+        value: console
+      - key: ESCALATION_DELAY_MS
+        value: "180000"
+      - key: NODE_ENV
+        value: production
