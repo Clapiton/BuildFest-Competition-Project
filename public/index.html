@@ -1,326 +1,547 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intake Portal — 10Alytics BuildFest 2026 (BF-1079)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0D0B1F;
-            --bg-card: #161428;
-            --border-glow: rgba(191, 255, 0, 0.3);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --primary: #BFFF00; /* 10Alytics Electric Lime */
-            --primary-dark: #a3d900;
-            --accent-pink: #FF2D9B; /* Hot Magenta Pink */
-            --accent-purple: #6B4EFF; /* Electric Purple */
-            --text-main: #FFFFFF;
-            --text-muted: #8B8B9E;
-            --success: #BFFF00;
-            --danger: #FF2D9B;
-            --ff-syne: 'Syne', sans-serif;
+            /* Tran Mau Tri Tam Geometric Light Palette (Default) */
+            --bg-body: #F8F7F3;
+            --bg-card: #FFFFFF;
+            --bg-subtle: #F1F0EA;
+            --border-color: #E6E4DC;
+            --border-hover: #D4D1C5;
+            --text-main: #1E1E28;
+            --text-muted: #6C6C7E;
+            --text-light: #9494A8;
+            
+            /* Accent Geometric Colors */
+            --geo-orange: #FF5635;
+            --geo-yellow: #FFC72C;
+            --geo-green: #00D084;
+            --geo-purple: #6C5CE7;
+            --geo-cyan: #00C2FF;
+            --geo-pink: #FF3B81;
+            
+            /* Component Specifics */
+            --card-shadow: 0 20px 40px -15px rgba(30, 30, 40, 0.07), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --card-radius: 28px;
+            --pill-radius: 9999px;
+            
+            --ff-heading: 'Outfit', sans-serif;
+            --ff-body: 'Plus Jakarta Sans', sans-serif;
+            --ff-mono: 'JetBrains Mono', monospace;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F0E17;
+            --bg-card: #1B1A26;
+            --bg-subtle: #252433;
+            --border-color: #2D2B3D;
+            --border-hover: #403D54;
+            --text-main: #FFFFFE;
+            --text-muted: #A7A6BA;
+            --text-light: #6E6D82;
+            --card-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.5);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 20% 0%, rgba(191, 255, 0, 0.07), transparent 45%),
-                radial-gradient(circle at 80% 100%, rgba(255, 45, 155, 0.07), transparent 45%);
+            font-family: var(--ff-body);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ── Official BuildFest Header Navigation ── */
-        .navbar {
-            background: rgba(10, 8, 25, 0.85);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 0.85rem 2.5rem;
+        /* ── Geometric Background Canvas Decorative Shapes ── */
+        .geo-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .geo-shape {
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+
+        .shape-arc-tr {
+            top: -60px;
+            right: -60px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: conic-gradient(from 180deg at 50% 50%, var(--geo-orange), var(--geo-yellow), var(--geo-pink), var(--geo-purple));
+            opacity: 0.85;
+            filter: blur(40px);
+        }
+
+        .shape-blob-bl {
+            bottom: -80px;
+            left: -80px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 208, 132, 0.3) 0%, rgba(0, 194, 255, 0.15) 70%, transparent 100%);
+            filter: blur(50px);
+        }
+
+        .shape-circle-float {
+            top: 18%;
+            left: 5%;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 12px solid var(--geo-yellow);
+            opacity: 0.6;
+            animation: floatSlow 6s ease-in-out infinite alternate;
+        }
+
+        .shape-pill-float {
+            top: 25%;
+            right: 6%;
+            width: 120px;
+            height: 44px;
+            background: var(--geo-purple);
+            border-radius: var(--pill-radius);
+            opacity: 0.15;
+            transform: rotate(-15deg);
+            animation: floatSlow 8s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-18px) rotate(8deg); }
+        }
+
+        /* ── Floating Header Navigation ── */
+        .navbar-wrapper {
+            padding: 1.5rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--pill-radius);
+            padding: 0.6rem 1.25rem 0.6rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(27, 26, 38, 0.8);
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
+            gap: 0.75rem;
             text-decoration: none;
             color: var(--text-main);
         }
 
-        .brand-logo-text {
-            color: var(--primary);
-            font-family: var(--ff-syne);
+        .brand-icon-geo {
+            width: 34px;
+            height: 34px;
+            background: var(--geo-purple);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-family: var(--ff-heading);
             font-weight: 900;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .brand-badge {
-            background: var(--primary);
-            color: #0D0B1F;
-            font-family: var(--ff-syne);
-            font-weight: 900;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 4px;
-            letter-spacing: 1px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
         }
 
         .brand-title {
-            font-family: var(--ff-syne);
+            font-family: var(--ff-heading);
             font-weight: 800;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
             color: var(--text-main);
+        }
+
+        .brand-badge {
+            background: var(--geo-yellow);
+            color: #1E1E28;
+            font-weight: 800;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--pill-radius);
+            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .nav-links {
+        .nav-menu {
             display: flex;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.25rem;
-            border-radius: 6px;
-            border: 1px solid var(--border-subtle);
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--bg-subtle);
+            padding: 0.3rem;
+            border-radius: var(--pill-radius);
+            border: 1px solid var(--border-color);
         }
 
         .nav-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.5rem 1.1rem;
-            font-size: 0.875rem;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            border-radius: 4px;
+            border-radius: var(--pill-radius);
             transition: all 0.2s ease;
-            font-family: var(--ff-syne);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .nav-item:hover {
             color: var(--text-main);
-            background: rgba(255, 255, 255, 0.06);
         }
 
         .nav-item.active {
-            color: #0D0B1F;
-            background: var(--primary);
-            box-shadow: 0 0 16px rgba(191, 255, 0, 0.4);
+            background: var(--bg-card);
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
-        .track-badge {
+        .nav-actions {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8125rem;
-            font-weight: 700;
-            color: var(--primary);
-            background: rgba(191, 255, 0, 0.08);
-            border: 1px solid rgba(191, 255, 0, 0.3);
-            padding: 0.4rem 0.9rem;
-            border-radius: 9999px;
-            font-family: var(--ff-syne);
-            letter-spacing: 0.5px;
+            gap: 0.75rem;
         }
 
-        .status-dot {
+        .theme-toggle-btn {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.08);
+            border-color: var(--border-hover);
+        }
+
+        /* ── Main Hero Layout ── */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .hero-header {
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto 3.5rem;
+            position: relative;
+        }
+
+        .hero-pill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 1rem;
+            border-radius: var(--pill-radius);
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-pill-tag .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: var(--primary);
-            box-shadow: 0 0 8px var(--primary);
-            animation: pulse 2s infinite;
+            background: var(--geo-green);
+            box-shadow: 0 0 10px var(--geo-green);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.3); }
+        /* Tran Mau Tri Tam Geometric Hero Typography with Inline Elements */
+        .hero-title {
+            font-family: var(--ff-heading);
+            font-weight: 900;
+            font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            color: var(--text-main);
+            margin-bottom: 1.25rem;
         }
 
-        /* ── Main Layout ── */
-        .main-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
+        .inline-geo {
+            display: inline-flex;
             align-items: center;
-            padding: 3rem 1.5rem;
+            justify-content: center;
+            vertical-align: middle;
+            margin: 0 0.35rem;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .inline-geo:hover {
+            transform: scale(1.15) rotate(6deg);
+        }
+
+        .geo-pill-arrow {
+            width: 54px;
+            height: 38px;
+            background: var(--geo-green);
+            border-radius: var(--pill-radius);
+            color: #FFF;
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        .geo-cylinder {
+            width: 64px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--geo-purple), var(--geo-pink));
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .geo-cylinder::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: #FFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .geo-sticker {
+            width: 44px;
+            height: 44px;
+            background: var(--geo-yellow);
+            border-radius: 50%;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 16px rgba(255, 199, 44, 0.4);
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 620px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        /* ── Form Card Surface ── */
+        .card-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Decorative Connector Lines around Card */
+        .connector-svg {
+            position: absolute;
+            top: -50px;
+            left: -80px;
+            width: 140px;
+            height: 140px;
+            pointer-events: none;
         }
 
         .card {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 4px solid var(--primary);
-            border-radius: 16px;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 660px;
-            padding: 2.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            padding: 3rem 2.75rem;
             position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .hero-tag {
-            color: var(--primary);
-            font-family: var(--ff-syne);
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--geo-orange), var(--geo-yellow), var(--geo-green), var(--geo-purple));
+        }
+
+        /* Preset Quick Buttons Bar */
+        .presets-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.85rem;
+        }
+
+        .presets-title {
+            font-family: var(--ff-heading);
             font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-header {
-            margin-bottom: 2.25rem;
-        }
-
-        .form-header h1 {
-            font-family: var(--ff-syne);
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.65rem;
-            color: #FFFFFF;
-        }
-
-        .form-header h1 span {
-            color: var(--primary);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Demo Presets Bar */
-        .preset-section {
-            margin-bottom: 2rem;
-            background: rgba(10, 8, 25, 0.6);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            padding: 1rem;
-        }
-
-        .preset-label {
-            font-family: var(--ff-syne);
-            font-size: 0.75rem;
-            font-weight: 800;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--primary);
-            margin-bottom: 0.65rem;
+            color: var(--geo-purple);
             display: flex;
             align-items: center;
             gap: 0.4rem;
         }
 
-        .preset-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+        .preset-pills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 0.65rem;
+            margin-bottom: 2rem;
         }
 
-        .preset-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .preset-chip {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            padding: 0.45rem 0.85rem;
-            border-radius: 4px;
+            padding: 0.7rem 1rem;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .preset-btn:hover {
-            background: rgba(191, 255, 0, 0.15);
-            border-color: var(--primary);
-            color: var(--primary);
+        .preset-chip:hover {
+            transform: translateY(-2px);
+            border-color: var(--geo-purple);
+            background: var(--bg-card);
+            box-shadow: 0 8px 20px -6px rgba(108, 92, 231, 0.2);
         }
 
-        /* Inputs */
+        .preset-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--geo-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        /* Form Inputs */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.6rem;
         }
 
         label {
             display: block;
-            font-size: 0.875rem;
-            font-weight: 700;
-            margin-bottom: 0.55rem;
-            color: #E2E8F0;
-            font-family: var(--ff-syne);
-            letter-spacing: 0.3px;
+            font-family: var(--ff-heading);
+            font-weight: 800;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
         }
 
-        input, textarea {
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
             width: 100%;
-            padding: 0.9rem 1.1rem;
-            background: rgba(10, 8, 25, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
+            padding: 1.05rem 1.25rem;
+            background: var(--bg-subtle);
+            border: 1.5px solid var(--border-color);
+            border-radius: 18px;
+            font-family: var(--ff-body);
+            font-size: 0.98rem;
             color: var(--text-main);
+            font-weight: 500;
             transition: all 0.2s ease;
         }
 
         input::placeholder, textarea::placeholder {
-            color: #525266;
+            color: var(--text-light);
         }
 
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(191, 255, 0, 0.15);
-            background: #0D0B1F;
+            border-color: var(--geo-purple);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.12);
         }
 
         textarea {
             resize: vertical;
-            min-height: 125px;
+            min-height: 140px;
+            line-height: 1.6;
         }
 
         .btn-submit {
-            background: var(--primary);
-            color: #0D0B1F;
+            background: var(--text-main);
+            color: var(--bg-card);
             border: none;
-            padding: 1.1rem 1.75rem;
-            font-family: var(--ff-syne);
-            font-size: 1rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-radius: 6px;
+            padding: 1.15rem 2rem;
+            font-family: var(--ff-heading);
+            font-size: 1.05rem;
+            font-weight: 800;
+            border-radius: var(--pill-radius);
             cursor: pointer;
             width: 100%;
-            transition: all 0.2s ease;
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 4px 20px rgba(191, 255, 0, 0.3);
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.2);
+            margin-top: 0.5rem;
         }
 
         .btn-submit:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(191, 255, 0, 0.45);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.3);
+            background: var(--geo-purple);
+            color: #FFF;
         }
 
         .btn-submit:disabled {
@@ -329,209 +550,298 @@
             transform: none;
         }
 
+        .btn-arrow-circle {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-submit:hover .btn-arrow-circle {
+            transform: translateX(4px);
+        }
+
         .error-banner {
-            background-color: rgba(255, 45, 155, 0.12);
-            border: 1px solid rgba(255, 45, 155, 0.3);
-            color: var(--accent-pink);
-            padding: 1rem;
-            border-radius: 8px;
+            background: rgba(255, 59, 129, 0.1);
+            border: 1.5px solid var(--geo-pink);
+            color: var(--geo-pink);
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
             margin-bottom: 1.5rem;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            font-weight: 700;
             display: none;
         }
 
         .spinner {
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2.5px solid rgba(13, 11, 31, 0.3);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #FFF;
             border-radius: 50%;
-            border-top-color: #0D0B1F;
             animation: spin 0.8s linear infinite;
             display: none;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Success Card View */
+        /* ── Success State Geometric Screen ── */
         #success-state {
             display: none;
             text-align: center;
             padding: 1rem 0;
         }
 
-        .success-icon-badge {
-            width: 76px;
-            height: 76px;
-            background: rgba(191, 255, 0, 0.15);
-            border: 2px solid var(--primary);
+        .success-badge-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .success-geo-icon {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--geo-green), #00E59B);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.4rem;
-            color: var(--primary);
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 0 30px rgba(191, 255, 0, 0.3);
+            font-size: 3rem;
+            color: #FFF;
+            box-shadow: 0 16px 40px -10px rgba(0, 208, 132, 0.4);
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .complaint-id-box {
-            background: #0D0B1F;
-            border: 1px dashed var(--primary);
-            padding: 0.85rem 1.4rem;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-            display: inline-block;
-            margin: 1.5rem 0;
-            letter-spacing: 1px;
+        @keyframes popIn {
+            0% { transform: scale(0.4); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .btn-outline {
-            background: transparent;
-            color: var(--text-main);
-            border: 1px solid var(--border-subtle);
-            padding: 0.85rem 1.5rem;
-            font-family: var(--ff-syne);
-            font-size: 0.875rem;
+        .complaint-id-card {
+            background: var(--bg-subtle);
+            border: 2px dashed var(--geo-purple);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            font-family: var(--ff-mono);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--geo-purple);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .btn-status-go {
+            background: var(--geo-green);
+            color: #FFF;
+            text-decoration: none;
+            padding: 1.1rem 2rem;
+            font-family: var(--ff-heading);
             font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .status-link {
+            font-size: 1.05rem;
+            border-radius: var(--pill-radius);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            color: #0D0B1F;
-            background: var(--primary);
-            font-family: var(--ff-syne);
-            font-weight: 900;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-decoration: none;
-            padding: 0.95rem 1.5rem;
-            border-radius: 6px;
+            gap: 0.75rem;
             width: 100%;
-            margin-top: 1.25rem;
-            box-shadow: 0 4px 16px rgba(191, 255, 0, 0.3);
+            box-shadow: 0 12px 28px -6px rgba(0, 208, 132, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .btn-status-go:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px -6px rgba(0, 208, 132, 0.5);
+        }
+
+        .btn-reset-form {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border-color);
+            padding: 0.9rem 1.5rem;
+            font-family: var(--ff-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: var(--pill-radius);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
             transition: all 0.2s ease;
         }
 
-        .status-link:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+        .btn-reset-form:hover {
+            background: var(--bg-subtle);
+            color: var(--text-main);
         }
 
-        .footer-text {
+        .footer-credits {
             text-align: center;
+            padding: 2.5rem 1.5rem;
             color: var(--text-muted);
-            font-size: 0.8125rem;
-            padding: 2rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        @media (max-width: 640px) {
+            .card { padding: 2rem 1.5rem; }
+            .hero-title { font-size: 2.1rem; }
+            .navbar { padding: 0.5rem 0.85rem; }
+            .brand-title { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Unified BuildFest Header Navigation -->
-    <nav class="navbar">
-        <a href="index.html" class="brand">
-            <span class="brand-logo-text">10ALYTICS BUSINESS</span>
-            <span class="brand-badge">BF-1079</span>
-            <span class="brand-title">BUILDFEST 2026</span>
-        </a>
+    <!-- Background Canvas Decorative Elements -->
+    <div class="geo-canvas">
+        <div class="geo-shape shape-arc-tr"></div>
+        <div class="geo-shape shape-blob-bl"></div>
+        <div class="geo-shape shape-circle-float"></div>
+        <div class="geo-shape shape-pill-float"></div>
+    </div>
 
-        <div class="nav-links">
-            <a href="index.html" class="nav-item active">Intake Form</a>
-            <a href="status.html" class="nav-item">Triage Dashboard</a>
-            <a href="workflow.html" class="nav-item">Workflow Spec</a>
-        </div>
+    <!-- Floating Navbar -->
+    <div class="navbar-wrapper">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <div class="brand-icon-geo">10</div>
+                <span class="brand-title">BuildFest AI</span>
+                <span class="brand-badge">BF-1079</span>
+            </a>
 
-        <div class="track-badge">
-            <div class="status-dot"></div>
-            <span>Track 5: AI Automation</span>
-        </div>
-    </nav>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-item active">Intake Form</a>
+                <a href="status.html" class="nav-item">Triage Dashboard</a>
+                <a href="workflow.html" class="nav-item">Workflow Spec</a>
+            </div>
 
-    <!-- Main Intake Section -->
+            <div class="nav-actions">
+                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">☀️</button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
     <main class="main-container">
-        <div class="card">
-            
-            <div id="form-state">
-                <div class="hero-tag">BUILD. BATTLE. WIN WITH AI.</div>
-                <div class="form-header">
-                    <h1>Customer Complaint <span>Intake Portal</span></h1>
-                    <p class="subtitle">Automated intake pipeline for Track 5 — Case Study 1: AI extraction, category routing, and SLA background escalation.</p>
+        <!-- Hero Header -->
+        <header class="hero-header">
+            <div class="hero-pill-tag">
+                <span class="dot"></span>
+                <span>Track 5 · AI Complaint Automation</span>
+            </div>
+            <h1 class="hero-title">
+                Automate <span class="inline-geo geo-pill-arrow">→</span> customer complaints <span class="inline-geo geo-cylinder"></span> faster <span class="inline-geo geo-sticker">⚡</span>
+            </h1>
+            <p class="hero-subtitle">
+                AI-driven intake pipeline extracting customer sentiment, urgency categories, auto-assigning SLA queues, and executing background escalation.
+            </p>
+        </header>
+
+        <!-- Form Card Container -->
+        <div class="card-wrapper">
+            <!-- SVG Geometric Connector line -->
+            <svg class="connector-svg" viewBox="0 0 140 140" fill="none">
+                <path d="M 10,10 Q 70,20 130,130" stroke="#FF5635" stroke-width="3" stroke-dasharray="6 6" />
+                <circle cx="10" cy="10" r="5" fill="#FF5635" />
+                <circle cx="130" cy="130" r="5" fill="#6C5CE7" />
+            </svg>
+
+            <div class="card">
+                <div id="form-state">
+                    <!-- Presets Header -->
+                    <div class="presets-header">
+                        <div class="presets-title">
+                            <span>⚡ Quick Demo Judging Presets</span>
+                        </div>
+                    </div>
+                    <div class="preset-pills">
+                        <button type="button" class="preset-chip" onclick="loadPreset('billing')">
+                            <span class="preset-icon">💳</span>
+                            <span>Billing Dispute</span>
+                        </button>
+                        <button type="button" class="preset-chip" onclick="loadPreset('product')">
+                            <span class="preset-icon">💻</span>
+                            <span>Product Bug</span>
+                        </button>
+                        <button type="button" class="preset-chip" onclick="loadPreset('service')">
+                            <span class="preset-icon">📞</span>
+                            <span>SLA Timeout</span>
+                        </button>
+                    </div>
+
+                    <div id="error-banner" class="error-banner"></div>
+
+                    <!-- Intake Form -->
+                    <form id="complaint-form">
+                        <div class="form-group">
+                            <label for="name">Customer Full Name</label>
+                            <input type="text" id="name" name="customer_name" required placeholder="e.g. Sarah Jenkins">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Customer Email Address</label>
+                            <input type="email" id="email" name="customer_email" required placeholder="e.g. sarah.j@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="complaint">Complaint Description</label>
+                            <textarea id="complaint" name="raw_message" required minlength="10" placeholder="Describe the customer issue or complaint in detail..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="btn-submit">
+                            <span id="btn-text">Submit Complaint</span>
+                            <span class="btn-arrow-circle" id="btn-arrow">→</span>
+                            <div class="spinner" id="btn-spinner"></div>
+                        </button>
+                    </form>
                 </div>
 
-                <!-- Quick Presets for Demo -->
-                <div class="preset-section">
-                    <div class="preset-label">⚡ Quick Judging Presets (Click to Auto-fill)</div>
-                    <div class="preset-buttons">
-                        <button type="button" class="preset-btn" onclick="loadPreset('billing')">💳 Billing Dispute</button>
-                        <button type="button" class="preset-btn" onclick="loadPreset('product')">💻 Product Bug</button>
-                        <button type="button" class="preset-btn" onclick="loadPreset('service')">📞 SLA Timeout</button>
+                <!-- Success State -->
+                <div id="success-state">
+                    <div class="success-badge-container">
+                        <div class="success-geo-icon">✓</div>
                     </div>
+                    <h2 style="font-family: var(--ff-heading); font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">Complaint Enqueued!</h2>
+                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 440px; margin: 0 auto 1.5rem;">
+                        The complaint has been recorded and pushed to BullMQ for background AI extraction and automated escalation monitoring.
+                    </p>
+
+                    <div class="complaint-id-card">
+                        <span>ID:</span>
+                        <span id="display-id" style="letter-spacing: 1px;">--------</span>
+                    </div>
+
+                    <a href="status.html" class="btn-status-go">
+                        <span>Open Triage Dashboard</span>
+                        <span>→</span>
+                    </a>
+                    <button type="button" class="btn-reset-form" onclick="resetForm()">Submit Another Complaint</button>
                 </div>
-
-                <div id="error-banner" class="error-banner"></div>
-
-                <form id="complaint-form">
-                    <div class="form-group">
-                        <label for="name">Customer Full Name</label>
-                        <input type="text" id="name" name="customer_name" required placeholder="e.g. Sarah Jenkins">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="customer_email" required placeholder="e.g. sarah.j@example.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="complaint">Complaint Description</label>
-                        <textarea id="complaint" name="raw_message" required minlength="10" placeholder="Describe the customer complaint in detail..."></textarea>
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="btn-submit">
-                        <span id="btn-text">Submit Complaint →</span>
-                        <div class="spinner" id="btn-spinner"></div>
-                    </button>
-                </form>
             </div>
-
-            <!-- Success State -->
-            <div id="success-state">
-                <div class="success-icon-badge">✓</div>
-                <h1 style="font-family: var(--ff-syne); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem;">Complaint Processed!</h1>
-                <p class="subtitle">The complaint has been saved to Supabase and enqueued for background AI analysis.</p>
-                
-                <div class="complaint-id-box">ID: <span id="display-id">--------</span></div>
-                
-                <a href="status.html" class="status-link">Open Live Dashboard →</a>
-                <button type="button" class="btn-outline" onclick="resetForm()">Submit Another Complaint</button>
-            </div>
-
         </div>
     </main>
 
-    <div class="footer-text">
-        10Alytics Business BuildFest 2026 · Track 5: AI Automation & Integrations · Participant ID: BF-1079
-    </div>
+    <footer class="footer-credits">
+        <span>10Alytics Business BuildFest 2026</span>
+        <span>•</span>
+        <span>Track 5: AI Automation</span>
+        <span>•</span>
+        <span>ID: BF-1079</span>
+    </footer>
 
     <script>
+        // Preset configurations
         const presets = {
             billing: {
                 name: 'Sarah Jenkins',
@@ -558,10 +868,26 @@
             }
         }
 
+        // Theme Switcher Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('buildfest_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('buildfest_theme', nextTheme);
+            themeBtn.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+        });
+
+        // Form Submit Handling
         const form = document.getElementById('complaint-form');
         const errorBanner = document.getElementById('error-banner');
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
+        const btnArrow = document.getElementById('btn-arrow');
         const btnSpinner = document.getElementById('btn-spinner');
         const formState = document.getElementById('form-state');
         const successState = document.getElementById('success-state');
@@ -571,7 +897,8 @@
             e.preventDefault();
             errorBanner.style.display = 'none';
             submitBtn.disabled = true;
-            btnText.textContent = 'Enqueuing AI Pipeline...';
+            btnText.textContent = 'Processing Intake...';
+            btnArrow.style.display = 'none';
             btnSpinner.style.display = 'block';
 
             const formData = {
@@ -594,19 +921,20 @@
                     throw new Error((data && data.error) || (data && data.message) || `Server error (${response.status})`);
                 }
 
-                // Success
+                // Show Success Card State
                 formState.style.display = 'none';
                 successState.style.display = 'block';
                 
                 const id = (data && data.complaint && data.complaint.id) ? data.complaint.id : '';
-                displayId.textContent = id ? id.substring(0, 8) : 'SUBMITTED';
+                displayId.textContent = id ? id.substring(0, 8).toUpperCase() : 'SUBMITTED';
                 
             } catch (error) {
                 errorBanner.textContent = error.message || 'An error occurred while submitting your complaint.';
                 errorBanner.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'Submit Complaint →';
+                btnText.textContent = 'Submit Complaint';
+                btnArrow.style.display = 'flex';
                 btnSpinner.style.display = 'none';
             }
         });
