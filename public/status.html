@@ -961,6 +961,9 @@
         let totalPages = 1;
         let totalComplaints = 0;
 
+        // Smart API Base URL (handles direct file:// opening and custom origins)
+        const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:3000' : '';
+
         // ── Supabase Auth State ──
         let supabaseClient = null;
         let activeAuthToken = localStorage.getItem('buildfest_supabase_token') || localStorage.getItem('buildfest_admin_key') || '';
@@ -968,7 +971,7 @@
 
         async function initSupabaseAuth() {
             try {
-                const res = await fetch('/api/auth/config');
+                const res = await fetch(`${API_BASE}/api/auth/config`);
                 if (!res.ok) throw new Error('Could not fetch auth configuration');
                 const authConfig = await res.json();
 
@@ -1135,7 +1138,7 @@
         // ── Fetch & Pagination Handlers ──
         async function fetchComplaints(page = currentPage) {
             try {
-                const response = await fetch(`/api/complaints?page=${page}&limit=20`, {
+                const response = await fetch(`${API_BASE}/api/complaints?page=${page}&limit=20`, {
                     headers: getAuthHeaders(),
                 });
 
@@ -1309,34 +1312,42 @@
 
         async function resolveComplaint(id) {
             try {
-                const response = await fetch(`/api/complaints/${id}/resolve`, {
+                const response = await fetch(`${API_BASE}/api/complaints/${id}/resolve`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                 });
                 if (response.status === 401) { openAuthModal(); return; }
-                if (response.ok) fetchComplaints();
-                else alert('Failed to resolve complaint');
-            } catch (err) { alert('Error resolving complaint'); }
+                const data = await response.json().catch(() => ({}));
+                if (response.ok) {
+                    fetchComplaints();
+                } else {
+                    alert(data.error || data.message || 'Failed to resolve complaint');
+                }
+            } catch (err) { alert('Error resolving complaint: ' + (err.message || err)); }
         }
 
         async function escalateComplaint(id) {
             if (!confirm('Manually escalate this complaint SLA to Support Manager?')) return;
             try {
-                const response = await fetch(`/api/complaints/${id}/escalate`, {
+                const response = await fetch(`${API_BASE}/api/complaints/${id}/escalate`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                 });
                 if (response.status === 401) { openAuthModal(); return; }
-                if (response.ok) fetchComplaints();
-                else alert('Failed to escalate complaint');
-            } catch (err) { alert('Error escalating complaint'); }
+                const data = await response.json().catch(() => ({}));
+                if (response.ok) {
+                    fetchComplaints();
+                } else {
+                    alert(data.error || data.message || 'Failed to escalate complaint');
+                }
+            } catch (err) { alert('Error escalating complaint: ' + (err.message || err)); }
         }
 
         async function promptReassign(id, currentAssignee) {
             const assignee = prompt('Enter new assignee email:', currentAssignee || 'team@support.com');
             if (!assignee) return;
             try {
-                const response = await fetch(`/api/complaints/${id}/reassign`, {
+                const response = await fetch(`${API_BASE}/api/complaints/${id}/reassign`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1345,9 +1356,13 @@
                     body: JSON.stringify({ assignee }),
                 });
                 if (response.status === 401) { openAuthModal(); return; }
-                if (response.ok) fetchComplaints();
-                else alert('Failed to reassign complaint');
-            } catch (err) { alert('Error reassigning complaint'); }
+                const data = await response.json().catch(() => ({}));
+                if (response.ok) {
+                    fetchComplaints();
+                } else {
+                    alert(data.error || data.message || 'Failed to reassign complaint');
+                }
+            } catch (err) { alert('Error reassigning complaint: ' + (err.message || err)); }
         }
 
         async function showAuditModal(id) {
@@ -1356,7 +1371,7 @@
             document.getElementById('audit-modal').style.display = 'flex';
 
             try {
-                const res = await fetch(`/api/complaints/${id}/audit-log`, {
+                const res = await fetch(`${API_BASE}/api/complaints/${id}/audit-log`, {
                     headers: getAuthHeaders(),
                 });
                 if (res.status === 401) {

@@ -969,6 +969,7 @@
         const formState = document.getElementById('form-state');
         const successState = document.getElementById('success-state');
         const displayId = document.getElementById('display-id');
+        const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:3000' : '';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -986,7 +987,7 @@
             };
 
             try {
-                const response = await fetch('/api/complaints', {
+                const response = await fetch(`${API_BASE}/api/complaints`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
