@@ -18,6 +18,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
+// Health check endpoints for UptimeRobot & monitoring services
+const healthHandler = (_req: express.Request, res: express.Response) => {
+  res.status(200).json({
+    status: "ok",
+    service: "buildfest-competition-project",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+};
+
+app.get("/health", healthHandler);
+app.get("/ping", healthHandler);
+app.get("/api/health", healthHandler);
+
 const ComplaintInput = z.object({
   customer_name: z.string().min(1, "Customer name is required"),
   customer_email: z.string().email("Valid email is required"),

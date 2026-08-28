@@ -22,5 +22,7 @@ export const config = {
   smtpPort: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : undefined,
   smtpUser: process.env.SMTP_USER,
   smtpPass: process.env.SMTP_PASS,
+  appUrl: process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || "3000"}`,
+  uptimeRobotApiKey: process.env.UPTIMEROBOT_API_KEY,
 };
 

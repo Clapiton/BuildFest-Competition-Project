@@ -103,6 +103,35 @@ The app will be running at `http://localhost:3000`.
 | `POST` | `/api/complaints/:id/escalate` | Manually escalate complaint to manager |
 | `POST` | `/api/complaints/:id/reassign` | Reassign complaint to a different agent |
 | `GET` | `/api/complaints/:id/audit-log` | Get full timeline of audit events for a complaint |
+| `GET` | `/health` | Health check endpoint for UptimeRobot & monitoring services |
+
+---
+
+## ⚡ UptimeRobot Keep-Alive (Keeping Render Awake 24/7)
+
+Render's free tier automatically spins down (sleeps) web services after 15 minutes of inbound HTTP inactivity. To keep this project **awake 24/7** so judges or users can test it live at any time, set up **UptimeRobot** (free tier):
+
+### Option A: Automated CLI Setup (Recommended)
+1. Get your UptimeRobot API key: [UptimeRobot Dashboard](https://uptimerobot.com) → **Account Settings** → **API Settings** → **Main API Key**.
+2. Add your keys to `.env` or Render environment settings:
+   ```env
+   APP_URL=https://buildfest-competition-project.onrender.com
+   UPTIMEROBOT_API_KEY=u1234567-xxxxxxxxxxxxxxxx
+   ```
+3. Run the setup script:
+   ```bash
+   npm run setup:uptimerobot
+   ```
+
+### Option B: Manual Web UI Setup
+1. Log in to [UptimeRobot](https://uptimerobot.com).
+2. Click **+ Add New Monitor**.
+3. Configure the monitor:
+   - **Monitor Type**: `HTTP(s)`
+   - **Friendly Name**: `BuildFest Render App`
+   - **URL (or IP)**: `https://buildfest-competition-project.onrender.com/health`
+   - **Monitoring Interval**: `5 minutes`
+4. Click **Create Monitor**. UptimeRobot will ping `/health` every 5 minutes, preventing Render from going to sleep.
 
 ---
 
