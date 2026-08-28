@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Workflow Spec — 10Alytics BuildFest 2026 (BF-1079)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,7 +99,7 @@
 
     /* Floating Navbar Navigation */
     .navbar-wrapper {
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 1.5rem;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -108,29 +108,31 @@
     .navbar {
       max-width: 1300px;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border-color);
       border-radius: var(--pill-radius);
-      padding: 0.6rem 1.25rem 0.6rem 1.5rem;
+      padding: 0.5rem 1rem 0.5rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.75rem;
       box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
     }
 
     [data-theme="dark"] .navbar {
-      background: rgba(27, 26, 38, 0.8);
+      background: rgba(27, 26, 38, 0.85);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
       text-decoration: none;
       color: var(--text-main);
+      flex-shrink: 0;
     }
 
     .brand-icon-geo {
@@ -146,12 +148,13 @@
       font-weight: 900;
       font-size: 1.1rem;
       box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+      flex-shrink: 0;
     }
 
     .brand-title {
       font-family: var(--ff-heading);
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       letter-spacing: -0.5px;
       color: var(--text-main);
     }
@@ -169,21 +172,24 @@
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.25rem;
       background: var(--bg-subtle);
-      padding: 0.3rem;
+      padding: 0.25rem;
       border-radius: var(--pill-radius);
       border: 1px solid var(--border-color);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .nav-item {
       color: var(--text-muted);
       text-decoration: none;
-      padding: 0.5rem 1.25rem;
+      padding: 0.45rem 1rem;
       font-size: 0.85rem;
       font-weight: 700;
       border-radius: var(--pill-radius);
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-item:hover { color: var(--text-main); }
@@ -196,34 +202,37 @@
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
+      flex-shrink: 0;
     }
 
     .track-badge {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--geo-purple);
       background: rgba(108, 92, 231, 0.1);
       border: 1px solid rgba(108, 92, 231, 0.3);
-      padding: 0.4rem 0.9rem;
+      padding: 0.35rem 0.8rem;
       border-radius: var(--pill-radius);
+      white-space: nowrap;
     }
 
     .theme-toggle-btn {
       background: var(--bg-subtle);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .theme-toggle-btn:hover { transform: scale(1.08); }
@@ -231,7 +240,7 @@
     /* Header Title Section */
     .header-section {
       text-align: center;
-      padding: 2rem 1.5rem 2.5rem;
+      padding: 2rem 1.25rem 2.5rem;
       position: relative;
       z-index: 1;
     }
@@ -242,20 +251,20 @@
       gap: 0.4rem;
       font-family: var(--ff-heading);
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--geo-purple);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.4rem;
     }
 
     .header-section h1 {
       font-family: var(--ff-heading);
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
       font-weight: 900;
       line-height: 1.15;
       letter-spacing: -1px;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
       color: var(--text-main);
     }
 
@@ -263,18 +272,18 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.2rem 0.8rem;
+      padding: 0.2rem 0.75rem;
       background: var(--geo-green);
       color: #FFF;
       border-radius: var(--pill-radius);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       vertical-align: middle;
-      margin: 0 0.3rem;
+      margin: 0 0.25rem;
     }
 
     .header-section p {
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: clamp(0.95rem, 2vw, 1.05rem);
       font-weight: 500;
       max-width: 650px;
       margin: 0 auto;
@@ -284,13 +293,13 @@
     .main-wrapper {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 0 1.5rem 4rem;
+      padding: 0 1.25rem 4rem;
       width: 100%;
       position: relative;
       z-index: 1;
       flex: 1;
       display: flex;
-      gap: 2.25rem;
+      gap: 2rem;
       align-items: flex-start;
     }
 
@@ -299,23 +308,25 @@
       display: flex;
       flex-direction: column;
       gap: 0;
+      width: 100%;
     }
 
     .step-row {
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
     }
 
     .step-card {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1.15rem;
       width: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--card-radius);
-      padding: 1.5rem 1.75rem;
+      padding: clamp(1.15rem, 3vw, 1.5rem) clamp(1.15rem, 3vw, 1.75rem);
       box-shadow: var(--card-shadow);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
       position: relative;
@@ -328,14 +339,14 @@
     }
 
     .badge-number {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: var(--ff-heading);
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 900;
       flex-shrink: 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.06);
@@ -343,9 +354,9 @@
 
     .step-icon {
       flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       background: var(--bg-subtle);
       display: flex;
       align-items: center;
@@ -355,35 +366,35 @@
     .step-text { flex: 1; }
     .step-title {
       font-family: var(--ff-heading);
-      font-size: 1.2rem;
+      font-size: clamp(1.05rem, 2.5vw, 1.2rem);
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
       letter-spacing: -0.3px;
     }
     .step-sub {
-      font-size: 0.9rem;
+      font-size: clamp(0.82rem, 1.8vw, 0.9rem);
       color: var(--text-muted);
-      line-height: 1.55;
+      line-height: 1.5;
     }
     .step-sub code {
       font-family: var(--ff-mono);
       background: var(--bg-subtle);
       border: 1px solid var(--border-color);
-      padding: 0.2rem 0.45rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 6px;
       color: var(--geo-purple);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
 
     /* Color Themes per Step */
-    .step-card.s1 { border-left: 6px solid var(--geo-green); }
-    .step-card.s2 { border-left: 6px solid var(--geo-purple); }
-    .step-card.s3 { border-left: 6px solid var(--geo-cyan); }
-    .step-card.s4 { border-left: 6px solid var(--geo-orange); }
-    .step-card.s5 { border-left: 6px solid var(--geo-yellow); }
-    .step-card.s6 { border-left: 6px solid var(--geo-pink); }
-    .step-card.s7 { border-left: 6px solid var(--geo-purple); }
+    .step-card.s1 { border-left: 5px solid var(--geo-green); }
+    .step-card.s2 { border-left: 5px solid var(--geo-purple); }
+    .step-card.s3 { border-left: 5px solid var(--geo-cyan); }
+    .step-card.s4 { border-left: 5px solid var(--geo-orange); }
+    .step-card.s5 { border-left: 5px solid var(--geo-yellow); }
+    .step-card.s6 { border-left: 5px solid var(--geo-pink); }
+    .step-card.s7 { border-left: 5px solid var(--geo-purple); }
 
     .badge-number.s1 { background: rgba(0, 208, 132, 0.15); color: var(--geo-green); }
     .badge-number.s2 { background: rgba(108, 92, 231, 0.15); color: var(--geo-purple); }
@@ -400,85 +411,86 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0.4rem 0;
+      padding: 0.35rem 0;
     }
     .connector-line {
       width: 3px;
-      height: 30px;
+      height: 26px;
       border-radius: 2px;
     }
 
     /* Branch section */
     .or-divider {
       font-family: var(--ff-heading);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--geo-purple);
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin: 1.5rem 0 1rem;
+      letter-spacing: 1.2px;
+      margin: 1.25rem 0 0.85rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
       width: 100%;
       justify-content: center;
+      text-align: center;
     }
     .or-divider::before, .or-divider::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--border-color);
-      max-width: 140px;
+      max-width: 120px;
     }
 
     .resolve-card {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1.15rem;
       width: 100%;
       background: rgba(0, 208, 132, 0.08);
       border: 2px solid var(--geo-green);
       border-radius: var(--card-radius);
-      padding: 1.5rem 1.75rem;
+      padding: clamp(1.15rem, 3vw, 1.5rem) clamp(1.15rem, 3vw, 1.75rem);
       box-shadow: var(--card-shadow);
     }
 
     /* Audit Sidebar */
     .audit-sidebar {
-      width: 300px;
+      width: 280px;
       flex-shrink: 0;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--card-radius);
-      padding: 1.75rem;
+      padding: 1.5rem;
       box-shadow: var(--card-shadow);
       position: sticky;
-      top: 110px;
+      top: 105px;
     }
 
     .audit-sidebar h3 {
       font-family: var(--ff-heading);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 900;
       color: var(--geo-purple);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 1.5rem;
+      letter-spacing: 0.8px;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .audit-item {
       display: flex;
-      gap: 0.85rem;
-      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+      margin-bottom: 1.15rem;
       align-items: flex-start;
     }
 
     .audit-dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       margin-top: 0.25rem;
       flex-shrink: 0;
@@ -487,34 +499,49 @@
 
     .audit-event {
       font-family: var(--ff-heading);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: var(--text-main);
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
     .audit-detail {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 0.2rem;
-      line-height: 1.45;
+      margin-top: 0.15rem;
+      line-height: 1.4;
     }
 
     .footer-credits {
       text-align: center;
-      padding: 2.5rem 1.5rem;
+      padding: 2rem 1.25rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
+    /* Responsive Breakpoints */
     @media (max-width: 860px) {
       .audit-sidebar { display: none; }
       .main-wrapper { flex-direction: column; }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-wrapper { padding: 0.85rem 1rem; }
+      .navbar { padding: 0.5rem 0.75rem; }
+      .brand-title { display: none; }
+      .track-badge { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .step-card { padding: 1.15rem 1rem; border-radius: 18px; }
+      .step-icon { display: none; }
+      .badge-number { width: 34px; height: 34px; font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -695,8 +722,8 @@
 
       <div class="step-row">
         <div class="resolve-card">
-          <div style="color: var(--geo-green);">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div style="color: var(--geo-green); flex-shrink: 0;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           </div>
           <div class="step-text">
             <div class="step-title" style="color: var(--geo-green);">Human Agent Resolves Complaint</div>

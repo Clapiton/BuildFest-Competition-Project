@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Intake Portal — 10Alytics BuildFest 2026 (BF-1079)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,7 +131,7 @@
 
         /* ── Floating Header Navigation ── */
         .navbar-wrapper {
-            padding: 1.5rem 2rem;
+            padding: 1.25rem 1.5rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -140,29 +140,31 @@
         .navbar {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: var(--pill-radius);
-            padding: 0.6rem 1.25rem 0.6rem 1.5rem;
+            padding: 0.5rem 1rem 0.5rem 1.25rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 0.75rem;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
         [data-theme="dark"] .navbar {
-            background: rgba(27, 26, 38, 0.8);
+            background: rgba(27, 26, 38, 0.85);
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.65rem;
             text-decoration: none;
             color: var(--text-main);
+            flex-shrink: 0;
         }
 
         .brand-icon-geo {
@@ -178,12 +180,13 @@
             font-weight: 900;
             font-size: 1.1rem;
             box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+            flex-shrink: 0;
         }
 
         .brand-title {
             font-family: var(--ff-heading);
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             letter-spacing: -0.5px;
             color: var(--text-main);
         }
@@ -202,21 +205,24 @@
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.25rem;
             background: var(--bg-subtle);
-            padding: 0.3rem;
+            padding: 0.25rem;
             border-radius: var(--pill-radius);
             border: 1px solid var(--border-color);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .nav-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.5rem 1.25rem;
+            padding: 0.45rem 1rem;
             font-size: 0.85rem;
             font-weight: 700;
             border-radius: var(--pill-radius);
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .nav-item:hover {
@@ -232,21 +238,23 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
+            flex-shrink: 0;
         }
 
         .theme-toggle-btn {
             background: var(--bg-subtle);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .theme-toggle-btn:hover {
@@ -258,7 +266,7 @@
         .main-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 2.5rem 1.5rem 5rem;
+            padding: 2rem 1.25rem 4rem;
             width: 100%;
             position: relative;
             z-index: 1;
@@ -268,7 +276,7 @@
         .hero-header {
             text-align: center;
             max-width: 850px;
-            margin: 0 auto 3.5rem;
+            margin: 0 auto 3rem;
             position: relative;
         }
 
@@ -278,15 +286,16 @@
             gap: 0.5rem;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 0.4rem 1rem;
+            padding: 0.35rem 0.9rem;
             border-radius: var(--pill-radius);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
+            max-width: 100%;
         }
 
         .hero-pill-tag .dot {
@@ -295,17 +304,18 @@
             border-radius: 50%;
             background: var(--geo-green);
             box-shadow: 0 0 10px var(--geo-green);
+            flex-shrink: 0;
         }
 
         /* Tran Mau Tri Tam Geometric Hero Typography with Inline Elements */
         .hero-title {
             font-family: var(--ff-heading);
             font-weight: 900;
-            font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-            line-height: 1.12;
-            letter-spacing: -1.5px;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            line-height: 1.15;
+            letter-spacing: -1.2px;
             color: var(--text-main);
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.15rem;
         }
 
         .inline-geo {
@@ -313,7 +323,7 @@
             align-items: center;
             justify-content: center;
             vertical-align: middle;
-            margin: 0 0.35rem;
+            margin: 0 0.25rem;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -322,18 +332,18 @@
         }
 
         .geo-pill-arrow {
-            width: 54px;
-            height: 38px;
+            width: 50px;
+            height: 36px;
             background: var(--geo-green);
             border-radius: var(--pill-radius);
             color: #FFF;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 900;
         }
 
         .geo-cylinder {
-            width: 64px;
-            height: 38px;
+            width: 60px;
+            height: 36px;
             background: linear-gradient(135deg, var(--geo-purple), var(--geo-pink));
             border-radius: 20px;
             position: relative;
@@ -341,16 +351,16 @@
 
         .geo-cylinder::after {
             content: '';
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             background: #FFF;
             border-radius: 50%;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .geo-sticker {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--geo-yellow);
             border-radius: 50%;
             color: #1E1E28;
@@ -358,7 +368,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
             color: var(--text-muted);
             line-height: 1.6;
             max-width: 620px;
@@ -388,7 +398,7 @@
             border: 1px solid var(--border-color);
             border-radius: var(--card-radius);
             box-shadow: var(--card-shadow);
-            padding: 3rem 2.75rem;
+            padding: clamp(1.5rem, 4vw, 2.75rem);
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -426,7 +436,7 @@
 
         .preset-pills {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 0.65rem;
             margin-bottom: 2rem;
         }
@@ -435,15 +445,16 @@
             background: var(--bg-subtle);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 0.7rem 1rem;
+            padding: 0.65rem 0.85rem;
             border-radius: 16px;
             font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 100%;
         }
 
         .preset-chip:hover {
@@ -467,15 +478,15 @@
 
         /* Form Inputs */
         .form-group {
-            margin-bottom: 1.6rem;
+            margin-bottom: 1.4rem;
         }
 
         label {
             display: block;
             font-family: var(--ff-heading);
             font-weight: 800;
-            font-size: 0.9rem;
-            margin-bottom: 0.6rem;
+            font-size: 0.88rem;
+            margin-bottom: 0.5rem;
             color: var(--text-main);
             letter-spacing: -0.2px;
         }
@@ -484,12 +495,12 @@
         input[type="email"],
         textarea {
             width: 100%;
-            padding: 1.05rem 1.25rem;
+            padding: 0.95rem 1.15rem;
             background: var(--bg-subtle);
             border: 1.5px solid var(--border-color);
-            border-radius: 18px;
+            border-radius: 16px;
             font-family: var(--ff-body);
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             color: var(--text-main);
             font-weight: 500;
             transition: all 0.2s ease;
@@ -508,17 +519,17 @@
 
         textarea {
             resize: vertical;
-            min-height: 140px;
-            line-height: 1.6;
+            min-height: 130px;
+            line-height: 1.55;
         }
 
         .btn-submit {
             background: var(--text-main);
             color: var(--bg-card);
             border: none;
-            padding: 1.15rem 2rem;
+            padding: 1.1rem 1.75rem;
             font-family: var(--ff-heading);
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 800;
             border-radius: var(--pill-radius);
             cursor: pointer;
@@ -546,14 +557,15 @@
         }
 
         .btn-arrow-circle {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .btn-submit:hover .btn-arrow-circle {
@@ -564,10 +576,10 @@
             background: rgba(255, 59, 129, 0.1);
             border: 1.5px solid var(--geo-pink);
             color: var(--geo-pink);
-            padding: 1rem 1.25rem;
+            padding: 0.9rem 1.15rem;
             border-radius: 16px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.88rem;
             font-weight: 700;
             display: none;
         }
@@ -593,9 +605,9 @@
 
         .success-badge-container {
             position: relative;
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 1.5rem;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.25rem;
         }
 
         .success-geo-icon {
@@ -619,31 +631,32 @@
         .complaint-id-card {
             background: var(--bg-subtle);
             border: 2px dashed var(--geo-purple);
-            padding: 1rem 1.5rem;
-            border-radius: 20px;
+            padding: 0.85rem 1.25rem;
+            border-radius: 18px;
             font-family: var(--ff-mono);
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: var(--geo-purple);
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            margin: 1.5rem 0 2rem;
+            gap: 0.65rem;
+            margin: 1.25rem 0 1.75rem;
+            max-width: 100%;
         }
 
         .btn-status-go {
             background: var(--geo-green);
             color: #FFF;
             text-decoration: none;
-            padding: 1.1rem 2rem;
+            padding: 1rem 1.75rem;
             font-family: var(--ff-heading);
             font-weight: 800;
-            font-size: 1.05rem;
+            font-size: 1rem;
             border-radius: var(--pill-radius);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
+            gap: 0.65rem;
             width: 100%;
             box-shadow: 0 12px 28px -6px rgba(0, 208, 132, 0.35);
             transition: all 0.25s ease;
@@ -658,14 +671,14 @@
             background: transparent;
             color: var(--text-muted);
             border: 1.5px solid var(--border-color);
-            padding: 0.9rem 1.5rem;
+            padding: 0.85rem 1.25rem;
             font-family: var(--ff-heading);
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             border-radius: var(--pill-radius);
             cursor: pointer;
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 0.85rem;
             transition: all 0.2s ease;
         }
 
@@ -676,21 +689,36 @@
 
         .footer-credits {
             text-align: center;
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.25rem;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
-        @media (max-width: 640px) {
-            .card { padding: 2rem 1.5rem; }
-            .hero-title { font-size: 2.1rem; }
-            .navbar { padding: 0.5rem 0.85rem; }
+        /* ── Comprehensive Responsive Breakpoints ── */
+        @media (max-width: 768px) {
+            .navbar-wrapper { padding: 0.85rem 1rem; }
+            .navbar { padding: 0.5rem 0.75rem; }
             .brand-title { display: none; }
+            .connector-svg { display: none; }
+            .hero-header { margin-bottom: 2.25rem; }
+            .preset-pills { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .card-wrapper { max-width: 100%; }
+            .card { padding: 1.5rem 1.15rem; border-radius: 20px; }
+            .hero-title { font-size: 2rem; }
+            .geo-pill-arrow { width: 40px; height: 30px; font-size: 1rem; }
+            .geo-cylinder { width: 48px; height: 30px; }
+            .geo-sticker { width: 34px; height: 34px; }
+            .geo-sticker svg { width: 18px; height: 18px; }
+            .nav-item { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -818,11 +846,11 @@
                 <div id="success-state">
                     <div class="success-badge-container">
                         <div class="success-geo-icon">
-                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                         </div>
                     </div>
-                    <h2 style="font-family: var(--ff-heading); font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">Complaint Enqueued!</h2>
-                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 440px; margin: 0 auto 1.5rem;">
+                    <h2 style="font-family: var(--ff-heading); font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 900; margin-bottom: 0.5rem;">Complaint Enqueued!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 440px; margin: 0 auto 1.25rem;">
                         The complaint has been recorded and pushed to BullMQ for background AI extraction and automated escalation monitoring.
                     </p>
 
