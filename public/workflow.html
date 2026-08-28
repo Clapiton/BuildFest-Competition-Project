@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Complaint Workflow — BuildFest 2026 BF-1079</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #080e1f;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #14b8a6, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+    .header .sub {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* ── Layout ── */
+    .diagram-wrapper {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* ── Main pipeline ── */
+    .pipeline {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      position: relative;
+    }
+
+    .step-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Card */
+    .step-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px 22px;
+      backdrop-filter: blur(12px);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .step-card:hover {
+      transform: translateX(4px);
+      box-shadow: 0 0 24px rgba(255,255,255,0.06);
+    }
+
+    /* Number badge */
+    .badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid;
+    }
+
+    /* Icon */
+    .step-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      width: 40px;
+      text-align: center;
+    }
+
+    /* Text */
+    .step-text { flex: 1; }
+    .step-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; }
+    .step-sub   { font-size: 0.78rem; color: #94a3b8; margin-top: 3px; line-height: 1.5; }
+
+    /* Connector arrow */
+    .connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2px 0;
+    }
+    .connector-line {
+      width: 2px;
+      height: 28px;
+    }
+    .connector-arrow {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+    }
+
+    /* Resolve branch */
+    .resolve-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 4px;
+      width: 100%;
+    }
+    .resolve-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-top: 6px;
+    }
+    .resolve-icon { font-size: 1.4rem; }
+
+    /* OR badge between escalate and resolve */
+    .or-divider {
+      font-size: 0.7rem;
+      color: #475569;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 10px 0 4px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      max-width: 100px;
+    }
+
+    /* ── Audit Trail sidebar ── */
+    .audit-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 20px 16px;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 48px;
+    }
+    .audit-sidebar h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .audit-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+    .audit-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .audit-event { font-size: 0.75rem; font-weight: 600; color: #e2e8f0; }
+    .audit-detail { font-size: 0.68rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
+    .audit-line {
+      width: 1px;
+      height: 10px;
+      background: rgba(255,255,255,0.1);
+      margin-left: 3px;
+    }
+
+    /* ── Step-specific colours ── */
+    .step-card.s1 { border-left: 3px solid #14b8a6; }
+    .step-card.s2 { border-left: 3px solid #a855f7; }
+    .step-card.s3 { border-left: 3px solid #3b82f6; }
+    .step-card.s4 { border-left: 3px solid #f97316; }
+    .step-card.s5 { border-left: 3px solid #22c55e; }
+    .step-card.s6 { border-left: 3px solid #eab308; }
+    .step-card.s7 { border-left: 3px solid #ef4444; }
+
+    .badge.s1 { background: rgba(20,184,166,0.15); border-color: #14b8a6; color: #14b8a6; }
+    .badge.s2 { background: rgba(168,85,247,0.15); border-color: #a855f7; color: #a855f7; }
+    .badge.s3 { background: rgba(59,130,246,0.15); border-color: #3b82f6; color: #3b82f6; }
+    .badge.s4 { background: rgba(249,115,22,0.15);  border-color: #f97316; color: #f97316; }
+    .badge.s5 { background: rgba(34,197,94,0.15);   border-color: #22c55e; color: #22c55e; }
+    .badge.s6 { background: rgba(234,179,8,0.15);   border-color: #eab308; color: #eab308; }
+    .badge.s7 { background: rgba(239,68,68,0.15);   border-color: #ef4444; color: #ef4444; }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      text-align: center;
+      color: #334155;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 700px) {
+      .audit-sidebar { display: none; }
+      .diagram-wrapper { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>🤖 AI Complaint Workflow</h1>
+    <p class="sub">BuildFest 2026 — Track 5, Case Study 1 &nbsp;·&nbsp; Participant ID: <strong>BF-1079</strong></p>
+  </header>
+
+  <div class="diagram-wrapper">
+
+    <!-- ── Pipeline ── -->
+    <div class="pipeline">
+
+      <!-- Step 1 -->
+      <div class="step-row">
+        <div class="step-card s1">
+          <div class="badge s1">1</div>
+          <div class="step-icon">🌐</div>
+          <div class="step-text">
+            <div class="step-title">Customer Submits Complaint</div>
+            <div class="step-sub">HTML intake form → <code>POST /api/complaints</code> · Input validation (400 on empty)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#14b8a6,#a855f7);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #a855f7;"></div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-row">
+        <div class="step-card s2">
+          <div class="badge s2">2</div>
+          <div class="step-icon">🧠</div>
+          <div class="step-text">
+            <div class="step-title">AI Classification</div>
+            <div class="step-sub">OpenAI <code>gpt-4o-mini</code> → category · urgency · sentiment · summary · draft reply &nbsp;(Zod-validated, fallback on error)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#a855f7,#3b82f6);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #3b82f6;"></div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-row">
+        <div class="step-card s3">
+          <div class="badge s3">3</div>
+          <div class="step-icon">🔀</div>
+          <div class="step-text">
+            <div class="step-title">Route to Team Member</div>
+            <div class="step-sub">Billing → Alice &nbsp;·&nbsp; Product → Bob &nbsp;·&nbsp; Service → Carol &nbsp;·&nbsp; Other → Dave</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#3b82f6,#f97316);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #f97316;"></div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-row">
+        <div class="step-card s4">
+          <div class="badge s4">4</div>
+          <div class="step-icon">📧</div>
+          <div class="step-text">
+            <div class="step-title">Send Notifications</div>
+            <div class="step-sub">Customer acknowledgment &amp; team member alert via Resend · SMTP fallback · Console fallback</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#f97316,#22c55e);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #22c55e;"></div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-row">
+        <div class="step-card s5">
+          <div class="badge s5">5</div>
+          <div class="step-icon">🗄️</div>
+          <div class="step-text">
+            <div class="step-title">Track Status in Database</div>
+            <div class="step-sub"><code>received</code> → <code>in_progress</code> → <code>escalated</code> → <code>resolved</code> &nbsp;(Supabase Postgres + RLS)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#22c55e,#eab308);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #eab308;"></div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-row">
+        <div class="step-card s6">
+          <div class="badge s6">6</div>
+          <div class="step-icon">⏱️</div>
+          <div class="step-text">
+            <div class="step-title">Schedule Escalation Timer</div>
+            <div class="step-sub">BullMQ delayed job added to Upstash Redis · <strong>3 min</strong> (demo) / <strong>24h</strong> (production)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector">
+        <div class="connector-line" style="background:linear-gradient(to bottom,#eab308,#ef4444);"></div>
+        <div class="connector-arrow" style="border-top:8px solid #ef4444;"></div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step-row">
+        <div class="step-card s7">
+          <div class="badge s7">7</div>
+          <div class="step-icon">🚨</div>
+          <div class="step-text">
+            <div class="step-title">Auto-Escalate if Unresolved</div>
+            <div class="step-sub">Reassign to <code>manager@support.team</code> · Status → <code>escalated</code> · Alert email sent · Audit event logged</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resolve branch -->
+      <div class="or-divider">or resolved before timer fires</div>
+      <div class="resolve-section">
+        <div class="resolve-card">
+          <div class="resolve-icon">✅</div>
+          <div class="step-text">
+            <div class="step-title" style="color:#22c55e;">Manual Resolve</div>
+            <div class="step-sub"><code>POST /api/complaints/:id/resolve</code> → Status: <code>resolved</code> · Escalation job cancelled from Redis</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pipeline -->
+
+    <!-- ── Audit Sidebar ── -->
+    <aside class="audit-sidebar">
+      <h3>📋 Audit Trail</h3>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#14b8a6;"></div>
+        <div>
+          <div class="audit-event">received</div>
+          <div class="audit-detail">Complaint stored in Supabase</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#a855f7;"></div>
+        <div>
+          <div class="audit-event">classified</div>
+          <div class="audit-detail">Category: billing, Urgency: high</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#3b82f6;"></div>
+        <div>
+          <div class="audit-event">assigned</div>
+          <div class="audit-detail">Routed to alice@support.team</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#f97316;"></div>
+        <div>
+          <div class="audit-event">notified</div>
+          <div class="audit-detail">Customer ack + team alert sent</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#eab308;"></div>
+        <div>
+          <div class="audit-event">timer_set</div>
+          <div class="audit-detail">Escalation job queued (3 min)</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#ef4444;"></div>
+        <div>
+          <div class="audit-event">escalated</div>
+          <div class="audit-detail">SLA missed → manager notified</div>
+        </div>
+      </div>
+      <div class="audit-line"></div>
+
+      <div class="audit-item">
+        <div class="audit-dot" style="background:#22c55e;"></div>
+        <div>
+          <div class="audit-event">resolved</div>
+          <div class="audit-detail">Human agent closed complaint</div>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- /diagram-wrapper -->
+
+  <footer class="footer">
+    BuildFest 2026 · Track 5, Case Study 1: AI Workflow Automation · BF-1079
+  </footer>
+
+</body>
+</html>

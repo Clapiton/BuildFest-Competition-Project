@@ -9,6 +9,7 @@ An end-to-end AI-powered workflow that receives customer complaints, classifies 
 
 - 📥 **Public Complaint Intake Form**: [buildfest-competition-project.onrender.com](https://buildfest-competition-project.onrender.com/)
 - 💻 **Interactive Management Dashboard**: [buildfest-competition-project.onrender.com/status.html](https://buildfest-competition-project.onrender.com/status.html)
+- 📊 **Visual Workflow Diagram**: [buildfest-competition-project.onrender.com/workflow.html](https://buildfest-competition-project.onrender.com/workflow.html)
 
 ---
 
