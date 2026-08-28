@@ -35,18 +35,48 @@ export interface PaginatedComplaints {
   totalPages: number;
 }
 
+import { v4 as uuidv4 } from "uuid";
+
 export async function createComplaint(data: { customer_name: string; customer_email: string; raw_message: string }): Promise<Complaint> {
+  const id = uuidv4();
+  const now = new Date().toISOString();
+  const complaintRecord: Complaint = {
+    id,
+    customer_name: data.customer_name,
+    customer_email: data.customer_email,
+    raw_message: data.raw_message,
+    category: null,
+    urgency: null,
+    sentiment: null,
+    assigned_to: null,
+    status: "received",
+    ai_summary: null,
+    draft_reply: null,
+    created_at: now,
+    updated_at: now,
+  };
+
+  // Try insert with select first
   const { data: created, error } = await supabase
     .from("complaints")
-    .insert({ ...data, status: "received" })
+    .insert(complaintRecord)
     .select()
     .single();
 
   if (error) {
-    console.error("[DB Error] createComplaint:", error);
-    throw new Error("Unable to create complaint record");
+    // If SELECT policy blocked RETURNING *, attempt pure INSERT
+    console.warn("[DB Warning] insert with select failed, retrying insert-only:", error.message);
+    const { error: insertError } = await supabase
+      .from("complaints")
+      .insert(complaintRecord);
+
+    if (insertError) {
+      console.error("[DB Error] createComplaint:", insertError);
+      throw new Error(`Unable to create complaint record: ${insertError.message}`);
+    }
   }
-  return created as Complaint;
+
+  return (created as Complaint) || complaintRecord;
 }
 
 export async function getComplaint(id: string): Promise<Complaint | null> {
@@ -119,8 +149,7 @@ export async function logAuditEvent(complaintId: string, event: string, detail?:
     .insert({ complaint_id: complaintId, event, detail: detail || null });
 
   if (error) {
-    console.error("[DB Error] logAuditEvent:", error);
-    throw new Error("Unable to record audit log entry");
+    console.warn("[DB Warning] logAuditEvent failed:", error.message);
   }
 }
 

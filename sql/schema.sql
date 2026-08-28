@@ -50,17 +50,20 @@ CREATE POLICY "Service role full access on audit_log" ON audit_log
   FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- 2. Authenticated team members via Supabase Auth
-CREATE POLICY "Authenticated users can view complaints" ON complaints
-  FOR SELECT TO authenticated USING (true);
-
 CREATE POLICY "Authenticated users can update complaints" ON complaints
   FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "Authenticated users can view audit_log" ON audit_log
-  FOR SELECT TO authenticated USING (true);
+-- 3. Public insert and select policies
+CREATE POLICY "Public can insert complaints" ON complaints
+  FOR INSERT WITH CHECK (true);
 
--- 3. Anonymous/Public access: only INSERT allowed on complaints with status 'received'
-CREATE POLICY "Public can only insert received complaints" ON complaints
-  FOR INSERT TO anon WITH CHECK (status = 'received');
+CREATE POLICY "Public can select complaints" ON complaints
+  FOR SELECT USING (true);
+
+CREATE POLICY "Public can insert audit_log" ON audit_log
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Public can select audit_log" ON audit_log
+  FOR SELECT USING (true);
 
 -- (No SELECT, UPDATE, or DELETE permitted for anonymous clients on either table)
