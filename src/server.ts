@@ -32,10 +32,39 @@ app.get("/health", healthHandler);
 app.get("/ping", healthHandler);
 app.get("/api/health", healthHandler);
 
+// ── Anti-Spam & Rate-Limiting Protection State ──
+interface RateLimitRecord {
+  count: number;
+  lastSubmissionMs: number;
+}
+
+const deviceSubmissions = new Map<string, RateLimitRecord>();
+const ipSubmissions = new Map<string, RateLimitRecord>();
+const recentMessages = new Set<string>();
+
+// Cooldown window: 30 seconds per device/IP (prevents rapid automated AI API spamming while allowing judging demos)
+const SPAM_COOLDOWN_MS = 30 * 1000; 
+
+function cleanStaleLimits() {
+  const now = Date.now();
+  for (const [key, record] of deviceSubmissions.entries()) {
+    if (now - record.lastSubmissionMs > SPAM_COOLDOWN_MS * 4) {
+      deviceSubmissions.delete(key);
+    }
+  }
+  for (const [key, record] of ipSubmissions.entries()) {
+    if (now - record.lastSubmissionMs > SPAM_COOLDOWN_MS * 4) {
+      ipSubmissions.delete(key);
+    }
+  }
+}
+setInterval(cleanStaleLimits, 60000);
+
 const ComplaintInput = z.object({
   customer_name: z.string().min(1, "Customer name is required"),
   customer_email: z.string().email("Valid email is required"),
   raw_message: z.string().min(1, "Complaint message cannot be empty"),
+  website_url: z.string().optional(), // Honeypot field for bot trapping
 });
 
 app.post("/api/complaints", async (req, res) => {
@@ -44,11 +73,60 @@ app.post("/api/complaints", async (req, res) => {
     return res.status(400).json({ error: "Validation failed", details: result.error.issues });
   }
 
-  const { customer_name, customer_email, raw_message } = result.data;
+  const { customer_name, customer_email, raw_message, website_url } = result.data;
+
+  // 1. Bot Trap Honeypot Check: Automated spam bots fill hidden inputs
+  if (website_url && website_url.trim() !== "") {
+    console.warn("🛡️ Spam bot trapped via honeypot field. Submission rejected.");
+    return res.status(429).json({ error: "Spam detected. Automated submissions are blocked." });
+  }
+
+  // 2. Client Device ID & IP Tracking
+  const clientIp = (req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "unknown-ip").split(",")[0].trim();
+  const deviceId = (req.headers["x-device-id"] as string || "unknown-device").trim();
+  const now = Date.now();
+
+  const ipRecord = ipSubmissions.get(clientIp);
+  const deviceRecord = deviceSubmissions.get(deviceId);
+
+  if (ipRecord && now - ipRecord.lastSubmissionMs < SPAM_COOLDOWN_MS) {
+    const remainingSec = Math.ceil((SPAM_COOLDOWN_MS - (now - ipRecord.lastSubmissionMs)) / 1000);
+    return res.status(429).json({
+      error: `Anti-spam cooldown active. Please wait ${remainingSec} seconds before submitting again to protect AI quota.`,
+      cooldownSeconds: remainingSec,
+    });
+  }
+
+  if (deviceId !== "unknown-device" && deviceRecord && now - deviceRecord.lastSubmissionMs < SPAM_COOLDOWN_MS) {
+    const remainingSec = Math.ceil((SPAM_COOLDOWN_MS - (now - deviceRecord.lastSubmissionMs)) / 1000);
+    return res.status(429).json({
+      error: `Device submission limit active. Please wait ${remainingSec} seconds before submitting again.`,
+      cooldownSeconds: remainingSec,
+    });
+  }
+
+  // 3. Message Content Deduplication (Prevents repeating exact same spam text)
+  const messageHash = `${customer_email.toLowerCase()}:${raw_message.trim().toLowerCase()}`;
+  if (recentMessages.has(messageHash)) {
+    return res.status(429).json({ error: "Duplicate complaint detected. This exact submission was recently received." });
+  }
+
   try {
     const complaint = await createComplaint({ customer_name, customer_email, raw_message });
-    await logAuditEvent(complaint.id, "received", "Complaint received via web form");
+    
+    // Record rate limit state
+    ipSubmissions.set(clientIp, { count: (ipRecord?.count || 0) + 1, lastSubmissionMs: now });
+    if (deviceId !== "unknown-device") {
+      deviceSubmissions.set(deviceId, { count: (deviceRecord?.count || 0) + 1, lastSubmissionMs: now });
+    }
+    
+    // Track message hash for 5 minutes
+    recentMessages.add(messageHash);
+    setTimeout(() => recentMessages.delete(messageHash), 300000);
+
+    await logAuditEvent(complaint.id, "received", `Complaint received from ${clientIp} [Device: ${deviceId.substring(0, 8)}]`);
     await complaintQueue.add("process-complaint", { complaintId: complaint.id }, { jobId: complaint.id });
+    
     res.status(201).json({ success: true, complaint });
   } catch (error) {
     console.error("Error creating complaint:", error);
@@ -163,7 +241,6 @@ app.post("/api/complaints/:id/reassign", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error("Unhandled error:", err);

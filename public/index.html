@@ -414,6 +414,20 @@
             background: linear-gradient(90deg, var(--geo-orange), var(--geo-yellow), var(--geo-green), var(--geo-purple));
         }
 
+        /* Anti-Spam Security Shield Badge */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--geo-purple);
+            background: rgba(108, 92, 231, 0.08);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--pill-radius);
+        }
+
         /* Preset Quick Buttons Bar */
         .presets-header {
             display: flex;
@@ -791,6 +805,10 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                             <span>Quick Demo Judging Presets</span>
                         </div>
+                        <div class="security-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>Anti-Spam Active</span>
+                        </div>
                     </div>
                     <div class="preset-pills">
                         <button type="button" class="preset-chip" onclick="loadPreset('billing')">
@@ -817,6 +835,9 @@
 
                     <!-- Intake Form -->
                     <form id="complaint-form">
+                        <!-- Honeypot field for bot trapping (Invisible to real users) -->
+                        <input type="text" id="website_url" name="website_url" style="display:none !important;" tabindex="-1" autocomplete="off">
+
                         <div class="form-group">
                             <label for="name">Customer Full Name</label>
                             <input type="text" id="name" name="customer_name" required placeholder="e.g. Sarah Jenkins">
@@ -878,6 +899,13 @@
     </footer>
 
     <script>
+        // Unique Device Fingerprint Generator
+        let deviceId = localStorage.getItem('buildfest_device_id');
+        if (!deviceId) {
+            deviceId = 'dev_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+            localStorage.setItem('buildfest_device_id', deviceId);
+        }
+
         // Preset configurations
         const presets = {
             billing: {
@@ -931,7 +959,7 @@
             applyTheme(nextTheme);
         });
 
-        // Form Submit Handling
+        // Form Submit Handling with Anti-Spam Headers
         const form = document.getElementById('complaint-form');
         const errorBanner = document.getElementById('error-banner');
         const submitBtn = document.getElementById('submit-btn');
@@ -953,13 +981,17 @@
             const formData = {
                 customer_name: document.getElementById('name').value,
                 customer_email: document.getElementById('email').value,
-                raw_message: document.getElementById('complaint').value
+                raw_message: document.getElementById('complaint').value,
+                website_url: document.getElementById('website_url').value // Honeypot
             };
 
             try {
                 const response = await fetch('/api/complaints', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Device-ID': deviceId
+                    },
                     body: JSON.stringify(formData)
                 });
 
