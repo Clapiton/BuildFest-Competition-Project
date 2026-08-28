@@ -36,5 +36,11 @@ export const config = {
         "http://127.0.0.1:3000",
         "https://buildfest-competition-project.onrender.com",
       ],
+  // Support team email configuration for routing & notifications
+  supportBillingEmail: process.env.SUPPORT_BILLING_EMAIL || process.env.SUPPORT_TEAM_EMAIL || "alice@support.team",
+  supportProductEmail: process.env.SUPPORT_PRODUCT_EMAIL || process.env.SUPPORT_TEAM_EMAIL || "bob@support.team",
+  supportServiceEmail: process.env.SUPPORT_SERVICE_EMAIL || process.env.SUPPORT_TEAM_EMAIL || "carol@support.team",
+  supportOtherEmail: process.env.SUPPORT_OTHER_EMAIL || process.env.SUPPORT_TEAM_EMAIL || "dave@support.team",
+  supportManagerEmail: process.env.SUPPORT_MANAGER_EMAIL || process.env.SUPPORT_TEAM_EMAIL || "manager@support.team",
 };
 

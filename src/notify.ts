@@ -122,7 +122,7 @@ Summary: ${complaint.ai_summary || 'N/A'}
 
 export async function notifyEscalation(complaint: { id: string; customer_name: string; ai_summary: string | null; assigned_to: string | null }): Promise<void> {
   try {
-    const to = "manager@support.team";
+    const to = config.supportManagerEmail;
     const textContent = `⚠️ Complaint Escalation Alert\n\nComplaint ID: ${complaint.id}\nCustomer: ${complaint.customer_name}\nPreviously Assigned To: ${complaint.assigned_to || 'unassigned'}\nSummary: ${complaint.ai_summary || 'N/A'}`;
 
     if (resend) {
@@ -171,3 +171,75 @@ Summary: ${complaint.ai_summary || 'N/A'}
     console.error("notifyEscalation failed:", error);
   }
 }
+
+export async function notifyCustomerStatusUpdate(
+  email: string,
+  complaintId: string,
+  status: string,
+  detail?: string
+): Promise<string> {
+  const shortId = complaintId.substring(0, 8).toUpperCase();
+  let subject = `Update on your Complaint #${shortId}`;
+  let text = `Hello,\n\nYour complaint (ID: #${shortId}) status has been updated to: ${status.toUpperCase()}.\n`;
+
+  if (status === "resolved") {
+    subject = `Resolved: Your Complaint #${shortId}`;
+    text += `\nOur team has resolved your issue. ${detail || ''}\nThank you for reaching out to us.`;
+  } else if (status === "escalated") {
+    subject = `Escalated: Priority Update on Complaint #${shortId}`;
+    text += `\nYour complaint has been escalated to Senior Support Management for expedited handling.\n${detail || ''}`;
+  } else if (status === "reassigned") {
+    subject = `Reassigned: Update on Complaint #${shortId}`;
+    text += `\nYour complaint has been reassigned to a specialized team member (${detail || 'Support Specialist'}) who is actively working on your case.`;
+  }
+
+  try {
+    if (resend) {
+      try {
+        const { error } = await resend.emails.send({
+          from: "Support Team <onboarding@resend.dev>",
+          to: [email],
+          subject,
+          text,
+        });
+
+        if (!error) {
+          const msg = `✉️ [RESEND EMAIL] Sent ${status} update to customer ${email}`;
+          console.log(msg);
+          return `Delivered via Resend API to ${email}`;
+        }
+        console.error("Resend API error:", error);
+      } catch (err) {
+        console.error("Resend error, falling back:", err);
+      }
+    }
+
+    if (config.notificationMode === "email") {
+      try {
+        const transporter = getTransporter();
+        await transporter.sendMail({
+          from: `"Support Team" <${config.smtpUser || "support@example.com"}>`,
+          to: email,
+          subject,
+          text,
+        });
+        const msg = `✉️ [SMTP EMAIL] Sent ${status} update to customer ${email}`;
+        console.log(msg);
+        return `Delivered via SMTP to ${email}`;
+      } catch (emailError) {
+        console.error("Email failed, falling back to console logging:", emailError);
+      }
+    }
+
+    console.log(`
+📧 [CUSTOMER CONSEQUENTIAL EMAIL] To: ${email}
+Subject: ${subject}
+Body: ${text}
+    `.trim());
+    return `Dispatched (Console Logged) to ${email}`;
+  } catch (error) {
+    console.error("notifyCustomerStatusUpdate failed:", error);
+    return `Failed to send to ${email}`;
+  }
+}
+

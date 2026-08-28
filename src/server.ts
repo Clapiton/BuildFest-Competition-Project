@@ -15,7 +15,7 @@ import {
   supabase,
 } from "./db.js";
 import { complaintQueue, escalationQueue } from "./worker.js";
-import { notifyEscalation } from "./notify.js";
+import { notifyEscalation, notifyCustomerStatusUpdate, notifyTeamMember } from "./notify.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -404,6 +404,10 @@ app.post("/api/complaints/:id/resolve", requireSupabaseAuth, async (req, res) =>
     const updated = await updateComplaint(id, { status: "resolved" });
     await logAuditEvent(id, "resolved", `Complaint manually resolved by ${userEmail}`);
 
+    // Send consequential email to customer
+    await notifyCustomerStatusUpdate(complaint.customer_email, id, "resolved", `Issue marked resolved by ${userEmail}`);
+    await logAuditEvent(id, "email_sent", `Customer Resolution email sent to ${complaint.customer_email}`);
+
     try {
       const job = await escalationQueue.getJob(`escalation-${id}`);
       if (job) {
@@ -432,7 +436,7 @@ app.post("/api/complaints/:id/escalate", requireSupabaseAuth, async (req, res) =
     const userEmail = (req as any).user?.email || "team member";
     const updated = await updateComplaint(id, {
       status: "escalated",
-      assigned_to: "manager@support.team",
+      assigned_to: config.supportManagerEmail,
     });
     await logAuditEvent(id, "escalated", `Manually escalated to manager by ${userEmail}`);
     await notifyEscalation({
@@ -441,6 +445,11 @@ app.post("/api/complaints/:id/escalate", requireSupabaseAuth, async (req, res) =
       ai_summary: complaint.ai_summary,
       assigned_to: complaint.assigned_to,
     });
+    await logAuditEvent(id, "email_sent", `Manager Escalation email sent to ${config.supportManagerEmail}`);
+
+    // Send consequential email to customer
+    await notifyCustomerStatusUpdate(complaint.customer_email, id, "escalated", `Priority escalation triggered by ${userEmail}`);
+    await logAuditEvent(id, "email_sent", `Customer Escalation notice sent to ${complaint.customer_email}`);
 
     res.status(200).json({ success: true, complaint: updated });
   } catch (error) {
@@ -463,6 +472,20 @@ app.post("/api/complaints/:id/reassign", requireSupabaseAuth, async (req, res) =
     const userEmail = (req as any).user?.email || "team member";
     const updated = await updateComplaint(id, { assigned_to: assignee });
     await logAuditEvent(id, "reassigned", `Reassigned to ${assignee} by ${userEmail}`);
+
+    // Notify newly assigned team member
+    await notifyTeamMember(assignee, {
+      id: complaint.id,
+      customer_name: complaint.customer_name,
+      ai_summary: complaint.ai_summary,
+      urgency: complaint.urgency,
+      category: complaint.category,
+    });
+    await logAuditEvent(id, "email_sent", `Reassignment alert sent to new assignee ${assignee}`);
+
+    // Send consequential email to customer
+    await notifyCustomerStatusUpdate(complaint.customer_email, id, "reassigned", `Assigned to ${assignee}`);
+    await logAuditEvent(id, "email_sent", `Customer Reassignment update sent to ${complaint.customer_email}`);
 
     res.status(200).json({ success: true, complaint: updated });
   } catch (error) {

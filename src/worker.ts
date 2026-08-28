@@ -3,7 +3,7 @@ import IORedis from "ioredis";
 import { config } from "./config.js";
 import { getComplaint, updateComplaint, logAuditEvent } from "./db.js";
 import { classifyComplaint, fallbackClassification } from "./ai.js";
-import { notifyCustomer, notifyTeamMember, notifyEscalation } from "./notify.js";
+import { notifyCustomer, notifyTeamMember, notifyEscalation, notifyCustomerStatusUpdate } from "./notify.js";
 
 const connection = new IORedis(config.redisUrl, { maxRetriesPerRequest: null });
 
@@ -11,10 +11,10 @@ export const complaintQueue = new Queue("complaint-processing", { connection });
 export const escalationQueue = new Queue("escalation-check", { connection });
 
 const ROUTING_TABLE: Record<string, string> = {
-  billing: "alice@support.team",
-  product: "bob@support.team",
-  service: "carol@support.team",
-  other: "dave@support.team",
+  billing: config.supportBillingEmail,
+  product: config.supportProductEmail,
+  service: config.supportServiceEmail,
+  other: config.supportOtherEmail,
 };
 
 const processingHandler = async (job: Job) => {
@@ -52,6 +52,7 @@ const processingHandler = async (job: Job) => {
   await logAuditEvent(complaintId, "assigned", `Assigned to ${assignee}`);
 
   await notifyCustomer(complaint.customer_email, classification.draft_reply);
+  await logAuditEvent(complaintId, "email_sent", `Customer Acknowledgment email sent to ${complaint.customer_email}`);
   
   await notifyTeamMember(assignee, {
     id: complaint.id,
@@ -60,6 +61,7 @@ const processingHandler = async (job: Job) => {
     urgency: classification.urgency,
     category: classification.category
   });
+  await logAuditEvent(complaintId, "email_sent", `Assignment notice email sent to ${assignee}`);
 
   await escalationQueue.add(
     "check-escalation",
@@ -95,7 +97,7 @@ const escalationHandler = async (job: Job) => {
     return;
   }
 
-  await updateComplaint(complaintId, { status: "escalated", assigned_to: "manager@support.team" });
+  await updateComplaint(complaintId, { status: "escalated", assigned_to: config.supportManagerEmail });
   await logAuditEvent(complaintId, "escalated", "Auto-escalated: unresolved past SLA threshold");
   
   await notifyEscalation({
@@ -104,6 +106,10 @@ const escalationHandler = async (job: Job) => {
     ai_summary: complaint.ai_summary,
     assigned_to: complaint.assigned_to
   });
+  await logAuditEvent(complaintId, "email_sent", `Manager escalation alert sent to ${config.supportManagerEmail}`);
+
+  await notifyCustomerStatusUpdate(complaint.customer_email, complaint.id, "escalated", "SLA threshold exceeded; complaint escalated to senior management");
+  await logAuditEvent(complaintId, "email_sent", `Customer Escalation update email sent to ${complaint.customer_email}`);
 
   console.log(`⚠️ Complaint ${complaint.id} escalated to manager`);
 };
