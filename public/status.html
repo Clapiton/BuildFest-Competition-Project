@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triage Dashboard — BuildFest 2026 (BF-1079)</title>
+    <title>Triage Dashboard — 10Alytics BuildFest 2026 (BF-1079)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #080c14;
-            --bg-card: rgba(15, 23, 42, 0.75);
-            --border-glow: rgba(0, 242, 254, 0.15);
+            --bg-dark: #0D0B1F;
+            --bg-card: #161428;
+            --border-glow: rgba(191, 255, 0, 0.3);
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --primary: #00f2fe;
-            --accent-orange: #ff6b00;
-            --accent-purple: #8b5cf6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --primary: #BFFF00; /* 10Alytics Electric Lime */
+            --accent-pink: #FF2D9B; /* Hot Magenta Pink */
+            --accent-purple: #6B4EFF; /* Electric Purple */
+            --accent-cyan: #00E5FF;
+            --text-main: #FFFFFF;
+            --text-muted: #8B8B9E;
+            --success: #BFFF00;
+            --warning: #FF9500;
+            --danger: #FF2D9B;
+            --ff-syne: 'Syne', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,20 +31,20 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.08), transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08), transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(191, 255, 0, 0.06), transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(255, 45, 155, 0.06), transparent 45%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* ── Unified BuildFest Header ── */
+        /* ── Official BuildFest Header Navigation ── */
         .navbar {
-            background: rgba(8, 12, 20, 0.85);
-            backdrop-filter: blur(16px);
+            background: rgba(10, 8, 25, 0.85);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border-subtle);
-            padding: 0.85rem 2rem;
+            padding: 0.85rem 2.5rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -56,27 +58,37 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
             text-decoration: none;
             color: var(--text-main);
         }
 
+        .brand-logo-text {
+            color: var(--primary);
+            font-family: var(--ff-syne);
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
         .brand-badge {
-            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-            color: #000;
-            font-weight: 800;
+            background: var(--primary);
+            color: #0D0B1F;
+            font-family: var(--ff-syne);
+            font-weight: 900;
             font-size: 0.75rem;
             padding: 0.25rem 0.6rem;
-            border-radius: 0.375rem;
-            letter-spacing: 0.5px;
+            border-radius: 4px;
+            letter-spacing: 1px;
         }
 
         .brand-title {
+            font-family: var(--ff-syne);
             font-weight: 800;
-            font-size: 1.125rem;
-            background: linear-gradient(135deg, #ffffff 30%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
@@ -84,29 +96,32 @@
             gap: 0.5rem;
             background: rgba(255, 255, 255, 0.03);
             padding: 0.25rem;
-            border-radius: 0.5rem;
+            border-radius: 6px;
             border: 1px solid var(--border-subtle);
         }
 
         .nav-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.1rem;
             font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: 0.375rem;
+            font-weight: 700;
+            border-radius: 4px;
             transition: all 0.2s ease;
+            font-family: var(--ff-syne);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .nav-item:hover {
             color: var(--text-main);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .nav-item.active {
-            color: #080c14;
+            color: #0D0B1F;
             background: var(--primary);
-            box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 16px rgba(191, 255, 0, 0.4);
         }
 
         .refresh-pill {
@@ -114,19 +129,22 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.8125rem;
+            font-weight: 700;
             color: var(--text-muted);
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-subtle);
-            padding: 0.4rem 0.85rem;
+            padding: 0.4rem 0.9rem;
             border-radius: 9999px;
+            font-family: var(--ff-syne);
+            letter-spacing: 0.5px;
         }
 
         .spinner-pulse {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background-color: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
+            box-shadow: 0 0 8px var(--primary);
             animation: pulse 1.5s infinite;
         }
 
@@ -137,47 +155,57 @@
 
         /* Container */
         .container {
-            max-width: 1380px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             width: 100%;
             flex: 1;
         }
 
+        .hero-tag {
+            color: var(--primary);
+            font-family: var(--ff-syne);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
         .dashboard-header {
-            margin-bottom: 2rem;
+            margin-bottom: 2.25rem;
         }
 
         .dashboard-header h1 {
-            font-size: 1.75rem;
-            font-weight: 800;
+            font-family: var(--ff-syne);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 900;
             letter-spacing: -0.5px;
             margin-bottom: 0.35rem;
+            color: #FFFFFF;
         }
 
         .dashboard-header p {
             color: var(--text-muted);
-            font-size: 0.9375rem;
+            font-size: 0.95rem;
         }
 
         /* ── Metric Stat Cards Grid ── */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.25rem;
         }
 
         .stat-card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--border-subtle);
-            border-radius: 0.875rem;
-            padding: 1.25rem 1.5rem;
+            border-top: 3px solid var(--stat-color, var(--primary));
+            border-radius: 12px;
+            padding: 1.35rem 1.6rem;
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
             transition: all 0.2s ease;
         }
 
@@ -186,28 +214,19 @@
             transform: translateY(-2px);
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--stat-color, var(--primary));
-        }
-
         .stat-label {
-            font-size: 0.8125rem;
-            font-weight: 600;
+            font-family: var(--ff-syne);
+            font-size: 0.75rem;
+            font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             margin-bottom: 0.5rem;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 2.2rem;
+            font-weight: 900;
             color: var(--text-main);
             font-family: 'JetBrains Mono', monospace;
         }
@@ -215,16 +234,15 @@
         /* ── Table Container ── */
         .table-card {
             background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glow);
-            border-radius: 1rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
         }
 
         .table-toolbar {
-            padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
+            padding: 1.1rem 1.6rem;
+            background: rgba(10, 8, 25, 0.7);
             border-bottom: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
@@ -234,18 +252,19 @@
         }
 
         .search-input {
-            background: rgba(8, 12, 20, 0.7);
+            background: #0D0B1F;
             border: 1px solid var(--border-subtle);
-            border-radius: 0.5rem;
-            padding: 0.5rem 0.85rem;
+            border-radius: 6px;
+            padding: 0.6rem 1rem;
             color: var(--text-main);
             font-size: 0.875rem;
-            min-width: 240px;
+            min-width: 260px;
         }
 
         .search-input:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(191, 255, 0, 0.15);
         }
 
         table {
@@ -255,18 +274,19 @@
         }
 
         th {
-            background: rgba(8, 12, 20, 0.8);
-            padding: 0.9rem 1.25rem;
+            background: rgba(10, 8, 25, 0.9);
+            padding: 1rem 1.25rem;
+            font-family: var(--ff-syne);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--border-subtle);
         }
 
         td {
-            padding: 1rem 1.25rem;
+            padding: 1.1rem 1.25rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             font-size: 0.875rem;
             vertical-align: middle;
@@ -289,82 +309,88 @@
 
         /* Badges */
         .badge {
-            padding: 0.25rem 0.65rem;
-            border-radius: 9999px;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            text-transform: capitalize;
+            text-transform: uppercase;
+            font-family: var(--ff-syne);
+            letter-spacing: 0.5px;
         }
 
-        .cat-billing { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .cat-product { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
-        .cat-service { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
-        .cat-other   { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+        .cat-billing { background: rgba(0, 229, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
+        .cat-product { background: rgba(107, 78, 255, 0.12); color: #A78BFF; border: 1px solid rgba(107, 78, 255, 0.3); }
+        .cat-service { background: rgba(191, 255, 0, 0.12); color: var(--primary); border: 1px solid rgba(191, 255, 0, 0.3); }
+        .cat-other   { background: rgba(139, 139, 158, 0.12); color: #CBD5E1; border: 1px solid rgba(139, 139, 158, 0.3); }
 
-        .urg-high   { background: rgba(239, 68, 68, 0.18); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
-        .urg-medium { background: rgba(245, 158, 11, 0.18); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
-        .urg-low    { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .urg-high   { background: rgba(255, 45, 155, 0.18); color: var(--accent-pink); border: 1px solid rgba(255, 45, 155, 0.4); }
+        .urg-medium { background: rgba(255, 149, 0, 0.18); color: var(--warning); border: 1px solid rgba(255, 149, 0, 0.4); }
+        .urg-low    { background: rgba(191, 255, 0, 0.18); color: var(--primary); border: 1px solid rgba(191, 255, 0, 0.4); }
 
-        .stat-received    { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; }
-        .stat-in_progress { background: rgba(0, 242, 254, 0.15); color: var(--primary); border: 1px solid rgba(0, 242, 254, 0.3); }
-        .stat-escalated   { background: rgba(255, 107, 0, 0.18); color: #ff9d54; border: 1px solid rgba(255, 107, 0, 0.4); }
-        .stat-resolved    { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .stat-received    { background: rgba(255, 255, 255, 0.08); color: #CBD5E1; }
+        .stat-in_progress { background: rgba(191, 255, 0, 0.15); color: var(--primary); border: 1px solid rgba(191, 255, 0, 0.3); }
+        .stat-escalated   { background: rgba(255, 45, 155, 0.18); color: var(--accent-pink); border: 1px solid rgba(255, 45, 155, 0.4); }
+        .stat-resolved    { background: rgba(191, 255, 0, 0.18); color: var(--primary); border: 1px solid rgba(191, 255, 0, 0.4); }
 
         .action-group {
             display: flex;
-            gap: 0.35rem;
+            gap: 0.4rem;
             align-items: center;
         }
 
         .btn-sm {
             border: none;
-            padding: 0.35rem 0.65rem;
-            border-radius: 0.375rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
+            font-family: var(--ff-syne);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-resolve { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
-        .btn-resolve:hover { background: var(--success); color: #080c14; }
+        .btn-resolve { background: var(--primary); color: #0D0B1F; }
+        .btn-resolve:hover { background: var(--primary); transform: translateY(-1px); }
 
-        .btn-escalate { background: rgba(255, 107, 0, 0.2); color: #ff9d54; border: 1px solid rgba(255, 107, 0, 0.4); }
-        .btn-escalate:hover { background: var(--accent-orange); color: #080c14; }
+        .btn-escalate { background: rgba(255, 45, 155, 0.2); color: var(--accent-pink); border: 1px solid rgba(255, 45, 155, 0.4); }
+        .btn-escalate:hover { background: var(--accent-pink); color: #0D0B1F; }
 
-        .btn-reassign { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
-        .btn-reassign:hover { background: var(--accent-purple); color: #ffffff; }
+        .btn-reassign { background: rgba(107, 78, 255, 0.2); color: #A78BFF; border: 1px solid rgba(107, 78, 255, 0.4); }
+        .btn-reassign:hover { background: var(--accent-purple); color: #FFFFFF; }
 
-        .btn-audit { background: rgba(255, 255, 255, 0.08); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.12); }
+        .btn-audit { background: rgba(255, 255, 255, 0.08); color: #E2E8F0; border: 1px solid rgba(255, 255, 255, 0.12); }
         .btn-audit:hover { background: rgba(255, 255, 255, 0.18); }
 
         /* Expandable Details Drawer */
-        .details-row { background: rgba(8, 12, 20, 0.6); }
+        .details-row { background: rgba(10, 8, 25, 0.7); }
         .details-box {
-            padding: 1.25rem;
-            border-left: 3px solid var(--primary);
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 0.5rem;
-            margin: 0.5rem 0;
+            padding: 1.35rem;
+            border-left: 4px solid var(--primary);
+            background: #0D0B1F;
+            border-radius: 8px;
+            margin: 0.6rem 0;
             display: grid;
-            gap: 0.75rem;
+            gap: 0.85rem;
         }
 
         .detail-item strong {
             color: var(--primary);
-            font-size: 0.8125rem;
+            font-family: var(--ff-syne);
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             display: block;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
         }
 
         .detail-item p {
-            color: #e2e8f0;
-            font-size: 0.875rem;
+            color: #E2E8F0;
+            font-size: 0.9rem;
             line-height: 1.5;
         }
 
@@ -372,8 +398,8 @@
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(8, 12, 20, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(10, 8, 25, 0.85);
+            backdrop-filter: blur(12px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -381,15 +407,15 @@
         }
 
         .modal {
-            background: #0f172a;
+            background: #161428;
             border: 1px solid var(--border-glow);
-            border-radius: 1rem;
+            border-radius: 16px;
             width: 90%;
-            max-width: 620px;
+            max-width: 640px;
             max-height: 85vh;
             overflow-y: auto;
-            padding: 1.75rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
         }
 
         .modal-header {
@@ -401,7 +427,7 @@
             margin-bottom: 1.5rem;
         }
 
-        .modal-title { font-size: 1.125rem; font-weight: 800; color: var(--text-main); }
+        .modal-title { font-family: var(--ff-syne); font-size: 1.2rem; font-weight: 900; color: var(--text-main); }
         .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
         .close-btn:hover { color: var(--text-main); }
 
@@ -411,21 +437,21 @@
         .timeline-icon {
             position: absolute; left: 0.5rem; top: 0.1rem;
             width: 1.35rem; height: 1.35rem; border-radius: 50%;
-            background: var(--primary); color: #080c14;
+            background: var(--primary); color: #0D0B1F;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 800;
+            font-size: 0.7rem; font-weight: 900;
             box-shadow: 0 0 10px var(--primary);
         }
-        .timeline-event { font-weight: 700; font-size: 0.9375rem; margin-bottom: 0.25rem; text-transform: capitalize; color: var(--text-main); }
+        .timeline-event { font-family: var(--ff-syne); font-weight: 800; font-size: 0.95rem; margin-bottom: 0.25rem; text-transform: capitalize; color: var(--text-main); }
         .timeline-detail { font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; line-height: 1.4; }
         .timeline-time { font-size: 0.75rem; color: #64748b; font-family: 'JetBrains Mono', monospace; }
 
         .empty-state { padding: 4rem 2rem; text-align: center; color: var(--text-muted); display: none; }
-        .empty-state a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .empty-state a { color: var(--primary); text-decoration: none; font-weight: 700; font-family: var(--ff-syne); }
 
         .footer-text {
             text-align: center;
-            color: #475569;
+            color: var(--text-muted);
             font-size: 0.8125rem;
             padding: 1.5rem;
         }
@@ -436,50 +462,52 @@
     <!-- Unified BuildFest Header Navigation -->
     <nav class="navbar">
         <a href="index.html" class="brand">
+            <span class="brand-logo-text">10ALYTICS BUSINESS</span>
             <span class="brand-badge">BF-1079</span>
-            <span class="brand-title">BuildFest AI Automation</span>
+            <span class="brand-title">BUILDFEST 2026</span>
         </a>
 
         <div class="nav-links">
             <a href="index.html" class="nav-item">Intake Form</a>
-            <a href="status.html" class="nav-item active">Admin Dashboard</a>
+            <a href="status.html" class="nav-item active">Triage Dashboard</a>
             <a href="workflow.html" class="nav-item">Workflow Spec</a>
         </div>
 
         <div class="refresh-pill">
             <div class="spinner-pulse"></div>
-            <span>Auto-Syncing (10s)</span>
+            <span>Auto-Sync Active (10s)</span>
         </div>
     </nav>
 
     <!-- Main Container -->
     <div class="container">
+        <div class="hero-tag">BUILD. BATTLE. WIN WITH AI.</div>
         <div class="dashboard-header">
             <h1>Complaint Triage & SLA Escalation Dashboard</h1>
-            <p>Real-time AI classification, smart team routing & background SLA escalation queue</p>
+            <p>Real-time AI classification, smart team routing & automated SLA background escalation queue</p>
         </div>
 
         <!-- Metric Stat Cards Grid -->
         <div class="stats-grid" id="stats-container">
             <div class="stat-card" style="--stat-color: var(--primary)">
-                <span class="stat-label">Total Complaints</span>
+                <span class="stat-label">Total Submissions</span>
                 <span class="stat-value" id="stat-total">0</span>
             </div>
-            <div class="stat-card" style="--stat-color: #94a3b8">
+            <div class="stat-card" style="--stat-color: #8B8B9E">
                 <span class="stat-label">Received</span>
                 <span class="stat-value" id="stat-received">0</span>
             </div>
-            <div class="stat-card" style="--stat-color: var(--primary)">
+            <div class="stat-card" style="--stat-color: var(--accent-cyan)">
                 <span class="stat-label">In Progress</span>
-                <span class="stat-value" id="stat-progress" style="color: var(--primary)">0</span>
+                <span class="stat-value" id="stat-progress" style="color: var(--accent-cyan)">0</span>
             </div>
-            <div class="stat-card" style="--stat-color: var(--accent-orange)">
+            <div class="stat-card" style="--stat-color: var(--accent-pink)">
                 <span class="stat-label">Escalated</span>
-                <span class="stat-value" id="stat-escalated" style="color: var(--accent-orange)">0</span>
+                <span class="stat-value" id="stat-escalated" style="color: var(--accent-pink)">0</span>
             </div>
-            <div class="stat-card" style="--stat-color: var(--success)">
+            <div class="stat-card" style="--stat-color: var(--primary)">
                 <span class="stat-label">Resolved</span>
-                <span class="stat-value" id="stat-resolved" style="color: var(--success)">0</span>
+                <span class="stat-value" id="stat-resolved" style="color: var(--primary)">0</span>
             </div>
         </div>
 
@@ -488,7 +516,7 @@
             <div class="table-toolbar">
                 <input type="text" id="search-box" class="search-input" placeholder="🔍 Search by customer, ID, or text..." onkeyup="filterTable()">
                 <div style="font-size: 0.8125rem; color: var(--text-muted);">
-                    Click any row to expand AI summary & draft reply drawer
+                    Click any complaint row to expand AI summary & generated reply drawer
                 </div>
             </div>
 
@@ -511,10 +539,10 @@
 
             <div class="empty-state" id="empty-state">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
-                <h3 style="color: var(--text-main); margin-bottom: 0.5rem;">No Complaints Found</h3>
-                <p>Submit a test complaint from the intake portal to see live AI processing.</p>
+                <h3 style="color: var(--text-main); margin-bottom: 0.5rem; font-family: var(--ff-syne);">No Complaints Found</h3>
+                <p>Submit a complaint from the intake portal to watch live AI triage processing.</p>
                 <br>
-                <a href="index.html">← Go to Intake Portal</a>
+                <a href="index.html">← Go to Intake Form</a>
             </div>
         </div>
     </div>
@@ -531,7 +559,7 @@
     </div>
 
     <div class="footer-text">
-        BuildFest 2026 Competition · Track 5: AI Workflow Automation · Participant BF-1079
+        10Alytics Business BuildFest 2026 · Track 5: AI Automation & Integrations · Participant ID: BF-1079
     </div>
 
     <script>
@@ -607,7 +635,7 @@
                     }
                     actionButtons += `<button class="btn-sm btn-reassign" onclick="promptReassign('${c.id}', '${c.assigned_to || ''}')">👤 Reassign</button>`;
                 } else {
-                    actionButtons += `<span style="color: #10b981; font-size: 0.75rem; font-weight: 700; padding-left: 0.25rem;">✓ Closed</span>`;
+                    actionButtons += `<span style="color: var(--primary); font-size: 0.75rem; font-weight: 800; font-family: var(--ff-syne); padding-left: 0.25rem;">✓ Closed</span>`;
                 }
 
                 html += `

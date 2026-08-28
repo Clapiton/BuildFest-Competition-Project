@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intake Portal — BuildFest 2026 (BF-1079)</title>
+    <title>Intake Portal — 10Alytics BuildFest 2026 (BF-1079)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #080c14;
-            --bg-card: rgba(15, 23, 42, 0.75);
-            --border-glow: rgba(0, 242, 254, 0.2);
+            --bg-dark: #0D0B1F;
+            --bg-card: #161428;
+            --border-glow: rgba(191, 255, 0, 0.3);
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --primary: #00f2fe;
-            --primary-hover: #38bdf8;
-            --accent-orange: #ff6b00;
-            --accent-purple: #8b5cf6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --error: #ef4444;
-            --error-bg: rgba(239, 68, 68, 0.12);
+            --primary: #BFFF00; /* 10Alytics Electric Lime */
+            --primary-dark: #a3d900;
+            --accent-pink: #FF2D9B; /* Hot Magenta Pink */
+            --accent-purple: #6B4EFF; /* Electric Purple */
+            --text-main: #FFFFFF;
+            --text-muted: #8B8B9E;
+            --success: #BFFF00;
+            --danger: #FF2D9B;
+            --ff-syne: 'Syne', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,20 +30,20 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.12), transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08), transparent 40%);
+                radial-gradient(circle at 20% 0%, rgba(191, 255, 0, 0.07), transparent 45%),
+                radial-gradient(circle at 80% 100%, rgba(255, 45, 155, 0.07), transparent 45%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* ── Unified BuildFest Header ── */
+        /* ── Official BuildFest Header Navigation ── */
         .navbar {
-            background: rgba(8, 12, 20, 0.85);
-            backdrop-filter: blur(16px);
+            background: rgba(10, 8, 25, 0.85);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border-subtle);
-            padding: 0.85rem 2rem;
+            padding: 0.85rem 2.5rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -57,27 +57,37 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
             text-decoration: none;
             color: var(--text-main);
         }
 
+        .brand-logo-text {
+            color: var(--primary);
+            font-family: var(--ff-syne);
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
         .brand-badge {
-            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-            color: #000;
-            font-weight: 800;
+            background: var(--primary);
+            color: #0D0B1F;
+            font-family: var(--ff-syne);
+            font-weight: 900;
             font-size: 0.75rem;
             padding: 0.25rem 0.6rem;
-            border-radius: 0.375rem;
-            letter-spacing: 0.5px;
+            border-radius: 4px;
+            letter-spacing: 1px;
         }
 
         .brand-title {
+            font-family: var(--ff-syne);
             font-weight: 800;
-            font-size: 1.125rem;
-            background: linear-gradient(135deg, #ffffff 30%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
@@ -85,55 +95,61 @@
             gap: 0.5rem;
             background: rgba(255, 255, 255, 0.03);
             padding: 0.25rem;
-            border-radius: 0.5rem;
+            border-radius: 6px;
             border: 1px solid var(--border-subtle);
         }
 
         .nav-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.1rem;
             font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: 0.375rem;
+            font-weight: 700;
+            border-radius: 4px;
             transition: all 0.2s ease;
+            font-family: var(--ff-syne);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .nav-item:hover {
             color: var(--text-main);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .nav-item.active {
-            color: #080c14;
+            color: #0D0B1F;
             background: var(--primary);
-            box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 16px rgba(191, 255, 0, 0.4);
         }
 
-        .status-pill {
+        .track-badge {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.8125rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-subtle);
-            padding: 0.4rem 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(191, 255, 0, 0.08);
+            border: 1px solid rgba(191, 255, 0, 0.3);
+            padding: 0.4rem 0.9rem;
             border-radius: 9999px;
+            font-family: var(--ff-syne);
+            letter-spacing: 0.5px;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: var(--success);
-            box-shadow: 0 0 8px var(--success);
+            background-color: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            50% { opacity: 0.4; transform: scale(1.3); }
         }
 
         /* ── Main Layout ── */
@@ -142,69 +158,75 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2.5rem 1.5rem;
+            padding: 3rem 1.5rem;
         }
 
         .card {
             background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glow);
-            border-radius: 1.25rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 4px solid var(--primary);
+            border-radius: 16px;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 640px;
-            padding: 2.5rem;
+            max-width: 660px;
+            padding: 2.75rem;
             position: relative;
-            overflow: hidden;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent-purple), var(--accent-orange));
+        .hero-tag {
+            color: var(--primary);
+            font-family: var(--ff-syne);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
 
         .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.25rem;
         }
 
         .form-header h1 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
+            font-family: var(--ff-syne);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 900;
+            line-height: 1.1;
             letter-spacing: -0.5px;
+            margin-bottom: 0.65rem;
+            color: #FFFFFF;
+        }
+
+        .form-header h1 span {
+            color: var(--primary);
         }
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 0.9375rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        /* Quick Presets for Demo */
+        /* Demo Presets Bar */
         .preset-section {
-            margin-bottom: 1.75rem;
-            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 2rem;
+            background: rgba(10, 8, 25, 0.6);
             border: 1px solid var(--border-subtle);
-            border-radius: 0.75rem;
-            padding: 0.85rem 1rem;
+            border-radius: 10px;
+            padding: 1rem;
         }
 
         .preset-label {
+            font-family: var(--ff-syne);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: var(--primary);
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.65rem;
             display: flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.4rem;
         }
 
         .preset-buttons {
@@ -217,21 +239,21 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-main);
-            font-size: 0.78125rem;
-            font-weight: 500;
-            padding: 0.4rem 0.75rem;
-            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            padding: 0.45rem 0.85rem;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
         }
 
         .preset-btn:hover {
-            background: rgba(0, 242, 254, 0.15);
+            background: rgba(191, 255, 0, 0.15);
             border-color: var(--primary);
             color: var(--primary);
         }
 
-        /* Form Controls */
+        /* Inputs */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -239,17 +261,19 @@
         label {
             display: block;
             font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #cbd5e1;
+            font-weight: 700;
+            margin-bottom: 0.55rem;
+            color: #E2E8F0;
+            font-family: var(--ff-syne);
+            letter-spacing: 0.3px;
         }
 
         input, textarea {
             width: 100%;
-            padding: 0.875rem 1rem;
-            background: rgba(8, 12, 20, 0.6);
+            padding: 0.9rem 1.1rem;
+            background: rgba(10, 8, 25, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 0.625rem;
+            border-radius: 8px;
             font-family: inherit;
             font-size: 0.95rem;
             color: var(--text-main);
@@ -257,43 +281,46 @@
         }
 
         input::placeholder, textarea::placeholder {
-            color: #64748b;
+            color: #525266;
         }
 
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
-            background: rgba(8, 12, 20, 0.85);
+            box-shadow: 0 0 0 3px rgba(191, 255, 0, 0.15);
+            background: #0D0B1F;
         }
 
         textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 125px;
         }
 
         .btn-submit {
-            background: linear-gradient(135deg, var(--primary), #0284c7);
-            color: #080c14;
+            background: var(--primary);
+            color: #0D0B1F;
             border: none;
-            padding: 1rem 1.5rem;
+            padding: 1.1rem 1.75rem;
+            font-family: var(--ff-syne);
             font-size: 1rem;
-            font-weight: 700;
-            border-radius: 0.625rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
             transition: all 0.2s ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+            gap: 0.6rem;
+            box-shadow: 0 4px 20px rgba(191, 255, 0, 0.3);
         }
 
         .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
-            background: linear-gradient(135deg, #38bdf8, var(--primary));
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(191, 255, 0, 0.45);
         }
 
         .btn-submit:disabled {
@@ -303,11 +330,11 @@
         }
 
         .error-banner {
-            background-color: var(--error-bg);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: var(--error);
+            background-color: rgba(255, 45, 155, 0.12);
+            border: 1px solid rgba(255, 45, 155, 0.3);
+            color: var(--accent-pink);
             padding: 1rem;
-            border-radius: 0.625rem;
+            border-radius: 8px;
             margin-bottom: 1.5rem;
             font-size: 0.875rem;
             display: none;
@@ -316,16 +343,16 @@
         .spinner {
             width: 1.25rem;
             height: 1.25rem;
-            border: 2px solid rgba(8, 12, 20, 0.3);
+            border: 2.5px solid rgba(13, 11, 31, 0.3);
             border-radius: 50%;
-            border-top-color: #080c14;
+            border-top-color: #0D0B1F;
             animation: spin 0.8s linear infinite;
             display: none;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Success View */
+        /* Success Card View */
         #success-state {
             display: none;
             text-align: center;
@@ -333,30 +360,31 @@
         }
 
         .success-icon-badge {
-            width: 72px;
-            height: 72px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 2px solid var(--success);
+            width: 76px;
+            height: 76px;
+            background: rgba(191, 255, 0, 0.15);
+            border: 2px solid var(--primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem;
+            font-size: 2.4rem;
+            color: var(--primary);
             margin: 0 auto 1.5rem;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 30px rgba(191, 255, 0, 0.3);
         }
 
         .complaint-id-box {
-            background: rgba(8, 12, 20, 0.7);
+            background: #0D0B1F;
             border: 1px dashed var(--primary);
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.5rem;
+            padding: 0.85rem 1.4rem;
+            border-radius: 6px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--primary);
             display: inline-block;
-            margin: 1.25rem 0;
+            margin: 1.5rem 0;
             letter-spacing: 1px;
         }
 
@@ -364,10 +392,13 @@
             background: transparent;
             color: var(--text-main);
             border: 1px solid var(--border-subtle);
-            padding: 0.75rem 1.5rem;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            font-family: var(--ff-syne);
+            font-size: 0.875rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
             width: 100%;
@@ -384,28 +415,32 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            color: #080c14;
+            color: #0D0B1F;
             background: var(--primary);
-            font-weight: 700;
+            font-family: var(--ff-syne);
+            font-weight: 900;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             text-decoration: none;
-            padding: 0.85rem 1.5rem;
-            border-radius: 0.5rem;
+            padding: 0.95rem 1.5rem;
+            border-radius: 6px;
             width: 100%;
             margin-top: 1.25rem;
-            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 4px 16px rgba(191, 255, 0, 0.3);
             transition: all 0.2s ease;
         }
 
         .status-link:hover {
-            box-shadow: 0 6px 18px rgba(0, 242, 254, 0.4);
-            transform: translateY(-1px);
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .footer-text {
             text-align: center;
-            color: #475569;
+            color: var(--text-muted);
             font-size: 0.8125rem;
-            margin-top: 2rem;
+            padding: 2rem 1.5rem;
         }
     </style>
 </head>
@@ -414,39 +449,41 @@
     <!-- Unified BuildFest Header Navigation -->
     <nav class="navbar">
         <a href="index.html" class="brand">
+            <span class="brand-logo-text">10ALYTICS BUSINESS</span>
             <span class="brand-badge">BF-1079</span>
-            <span class="brand-title">BuildFest AI Automation</span>
+            <span class="brand-title">BUILDFEST 2026</span>
         </a>
 
         <div class="nav-links">
             <a href="index.html" class="nav-item active">Intake Form</a>
-            <a href="status.html" class="nav-item">Admin Dashboard</a>
+            <a href="status.html" class="nav-item">Triage Dashboard</a>
             <a href="workflow.html" class="nav-item">Workflow Spec</a>
         </div>
 
-        <div class="status-pill">
+        <div class="track-badge">
             <div class="status-dot"></div>
-            <span>AI Pipeline Active</span>
+            <span>Track 5: AI Automation</span>
         </div>
     </nav>
 
-    <!-- Main Form Section -->
+    <!-- Main Intake Section -->
     <main class="main-container">
-        <div class="card" id="main-card">
+        <div class="card">
             
             <div id="form-state">
+                <div class="hero-tag">BUILD. BATTLE. WIN WITH AI.</div>
                 <div class="form-header">
-                    <h1>Customer Complaint Intake</h1>
-                    <p class="subtitle">Submit a complaint for instant AI classification, category routing, and automated SLA escalation.</p>
+                    <h1>Customer Complaint <span>Intake Portal</span></h1>
+                    <p class="subtitle">Automated intake pipeline for Track 5 — Case Study 1: AI extraction, category routing, and SLA background escalation.</p>
                 </div>
 
                 <!-- Quick Presets for Demo -->
                 <div class="preset-section">
-                    <div class="preset-label">⚡ Quick Demo Presets (Click to fill)</div>
+                    <div class="preset-label">⚡ Quick Judging Presets (Click to Auto-fill)</div>
                     <div class="preset-buttons">
-                        <button type="button" class="preset-btn" onclick="loadPreset('billing')">💳 Billing Issue</button>
+                        <button type="button" class="preset-btn" onclick="loadPreset('billing')">💳 Billing Dispute</button>
                         <button type="button" class="preset-btn" onclick="loadPreset('product')">💻 Product Bug</button>
-                        <button type="button" class="preset-btn" onclick="loadPreset('service')">📞 Unresponsive Agent</button>
+                        <button type="button" class="preset-btn" onclick="loadPreset('service')">📞 SLA Timeout</button>
                     </div>
                 </div>
 
@@ -464,12 +501,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="complaint">Detailed Complaint</label>
-                        <textarea id="complaint" name="raw_message" required minlength="10" placeholder="Describe the issue you experienced in detail..."></textarea>
+                        <label for="complaint">Complaint Description</label>
+                        <textarea id="complaint" name="raw_message" required minlength="10" placeholder="Describe the customer complaint in detail..."></textarea>
                     </div>
 
                     <button type="submit" id="submit-btn" class="btn-submit">
-                        <span id="btn-text">Submit Complaint</span>
+                        <span id="btn-text">Submit Complaint →</span>
                         <div class="spinner" id="btn-spinner"></div>
                     </button>
                 </form>
@@ -478,12 +515,12 @@
             <!-- Success State -->
             <div id="success-state">
                 <div class="success-icon-badge">✓</div>
-                <h1 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Complaint Submitted!</h1>
-                <p class="subtitle">Your complaint has been queued for background AI extraction and team assignment.</p>
+                <h1 style="font-family: var(--ff-syne); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem;">Complaint Processed!</h1>
+                <p class="subtitle">The complaint has been saved to Supabase and enqueued for background AI analysis.</p>
                 
                 <div class="complaint-id-box">ID: <span id="display-id">--------</span></div>
                 
-                <a href="status.html" class="status-link">View Live Status Dashboard →</a>
+                <a href="status.html" class="status-link">Open Live Dashboard →</a>
                 <button type="button" class="btn-outline" onclick="resetForm()">Submit Another Complaint</button>
             </div>
 
@@ -491,7 +528,7 @@
     </main>
 
     <div class="footer-text">
-        BuildFest 2026 Competition · Track 5: AI Workflow Automation · Participant BF-1079
+        10Alytics Business BuildFest 2026 · Track 5: AI Automation & Integrations · Participant ID: BF-1079
     </div>
 
     <script>
@@ -499,17 +536,17 @@
             billing: {
                 name: 'Sarah Jenkins',
                 email: 'sarah.jenkins@example.com',
-                complaint: 'I was charged twice on my credit card for invoice #INV-8892 ($149.99). Please refund the extra payment immediately as this caused an overdraft fee.'
+                complaint: 'I was charged twice on my credit card for invoice #INV-8892 ($149.99). Please refund the duplicate payment immediately as it caused an overdraft fee.'
             },
             product: {
                 name: 'David Chen',
                 email: 'd.chen@techcorp.io',
-                complaint: 'The exported CSV files from the analytics dashboard are completely corrupted and missing timestamp columns after yesterday\'s update.'
+                complaint: 'The analytics dashboard CSV export tool is throwing 500 error codes and stripping timestamp fields after yesterday\'s system update.'
             },
             service: {
                 name: 'Elena Rostova',
                 email: 'elena@designstudio.com',
-                complaint: 'I submitted an urgent support ticket 3 days ago regarding locked access to my team account, but nobody has responded despite my premium plan SLA.'
+                complaint: 'I submitted a critical support request 3 days ago regarding locked enterprise team access, but no representative has responded within our agreed 24h SLA window.'
             }
         };
 
@@ -534,7 +571,7 @@
             e.preventDefault();
             errorBanner.style.display = 'none';
             submitBtn.disabled = true;
-            btnText.textContent = 'Processing Pipeline...';
+            btnText.textContent = 'Enqueuing AI Pipeline...';
             btnSpinner.style.display = 'block';
 
             const formData = {
@@ -569,7 +606,7 @@
                 errorBanner.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'Submit Complaint';
+                btnText.textContent = 'Submit Complaint →';
                 btnSpinner.style.display = 'none';
             }
         });
