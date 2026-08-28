@@ -223,7 +223,6 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
       transition: all 0.2s ease;
     }
 
@@ -343,10 +342,14 @@
     }
 
     .step-icon {
-      font-size: 2rem;
       flex-shrink: 0;
       width: 48px;
-      text-align: center;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .step-text { flex: 1; }
@@ -542,14 +545,20 @@
         <div class="track-badge">
           <span>Track 5 Architecture</span>
         </div>
-        <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">☀️</button>
+        <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">
+            <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
       </div>
     </nav>
   </div>
 
   <!-- Header Section -->
   <header class="header-section">
-    <div class="header-tag">⚡ System Execution Blueprint</div>
+    <div class="header-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>System Execution Blueprint</span>
+    </div>
     <h1>AI Complaint Pipeline <span class="inline-geo-pill">→</span> Architecture</h1>
     <p>Complete end-to-end flow specifications for Track 5 — Case Study 1: Complaint Automation</p>
   </header>
@@ -563,7 +572,9 @@
       <div class="step-row">
         <div class="step-card s1">
           <div class="badge-number s1">1</div>
-          <div class="step-icon">🌐</div>
+          <div class="step-icon" style="color: var(--geo-green);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Customer Submits Complaint</div>
             <div class="step-sub">Web Intake Portal → <code>POST /api/complaints</code> · Zod input validation (400 on error)</div>
@@ -579,7 +590,9 @@
       <div class="step-row">
         <div class="step-card s2">
           <div class="badge-number s2">2</div>
-          <div class="step-icon">🧠</div>
+          <div class="step-icon" style="color: var(--geo-purple);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">AI Extraction & Classification</div>
             <div class="step-sub">OpenAI / Claude API → category · urgency · sentiment · 1-sentence summary · empathetic draft reply</div>
@@ -595,7 +608,9 @@
       <div class="step-row">
         <div class="step-card s3">
           <div class="badge-number s3">3</div>
-          <div class="step-icon">🔀</div>
+          <div class="step-icon" style="color: var(--geo-cyan);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Route to Category Owner</div>
             <div class="step-sub">Billing → <code>alice@support.team</code> · Product → <code>bob@support.team</code> · Service → <code>carol@support.team</code></div>
@@ -611,7 +626,9 @@
       <div class="step-row">
         <div class="step-card s4">
           <div class="badge-number s4">4</div>
-          <div class="step-icon">📧</div>
+          <div class="step-icon" style="color: var(--geo-orange);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Send Automated Notifications</div>
             <div class="step-sub">Customer acknowledgment + team member assignment alert via Resend / SMTP</div>
@@ -627,7 +644,9 @@
       <div class="step-row">
         <div class="step-card s5">
           <div class="badge-number s5">5</div>
-          <div class="step-icon">🗄️</div>
+          <div class="step-icon" style="color: #B38600;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Persist Record & Audit Trail</div>
             <div class="step-sub">Supabase Postgres DB · Status transitions: <code>received</code> → <code>in_progress</code></div>
@@ -643,7 +662,9 @@
       <div class="step-row">
         <div class="step-card s6">
           <div class="badge-number s6">6</div>
-          <div class="step-icon">⏱️</div>
+          <div class="step-icon" style="color: var(--geo-pink);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Schedule Delayed Escalation Timer</div>
             <div class="step-sub">BullMQ delayed queue on Upstash Redis · <strong>3 mins</strong> (demo SLA) / <strong>24h</strong> (production SLA)</div>
@@ -659,7 +680,9 @@
       <div class="step-row">
         <div class="step-card s7">
           <div class="badge-number s7">7</div>
-          <div class="step-icon">🚨</div>
+          <div class="step-icon" style="color: var(--geo-purple);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title">Auto-Escalate SLA if Unresolved</div>
             <div class="step-sub">Reassign to <code>manager@support.team</code> · Status → <code>escalated</code> · Manager alert dispatched</div>
@@ -672,7 +695,9 @@
 
       <div class="step-row">
         <div class="resolve-card">
-          <div style="font-size: 2rem;">✅</div>
+          <div style="color: var(--geo-green);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
           <div class="step-text">
             <div class="step-title" style="color: var(--geo-green);">Human Agent Resolves Complaint</div>
             <div class="step-sub"><code>POST /api/complaints/:id/resolve</code> → Status: <code>resolved</code> · Delayed escalation job automatically removed from Redis</div>
@@ -684,7 +709,10 @@
 
     <!-- Audit Trail Sidebar -->
     <aside class="audit-sidebar">
-      <h3>📜 Audit State Machine</h3>
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Audit State Machine
+      </h3>
 
       <div class="audit-item">
         <div class="audit-dot" style="background: var(--geo-green); color: var(--geo-green);"></div>
@@ -756,16 +784,28 @@
   <script>
     // Theme Switcher
     const themeBtn = document.getElementById('theme-toggle');
+    const sunIcon = themeBtn.querySelector('.sun-icon');
+    const moonIcon = themeBtn.querySelector('.moon-icon');
     const savedTheme = localStorage.getItem('buildfest_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      } else {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      }
+    }
+
+    applyTheme(savedTheme);
 
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', nextTheme);
       localStorage.setItem('buildfest_theme', nextTheme);
-      themeBtn.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+      applyTheme(nextTheme);
     });
   </script>
 </body>

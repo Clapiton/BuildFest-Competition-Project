@@ -237,7 +237,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.1rem;
             transition: all 0.2s ease;
         }
 
@@ -334,14 +333,14 @@
         }
 
         .stat-icon-bg {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
             background: var(--bg-subtle);
+            color: var(--stat-accent, var(--geo-purple));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
         }
 
         .stat-value {
@@ -402,7 +401,8 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-light);
-            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
         }
 
         .toolbar-hint {
@@ -411,7 +411,7 @@
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
         }
 
         /* Table Design */
@@ -506,7 +506,7 @@
             font-family: var(--ff-heading);
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.35rem;
         }
 
         .btn-resolve { background: var(--geo-green); color: #FFF; }
@@ -597,7 +597,6 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            font-size: 1.2rem;
             cursor: pointer;
             color: var(--text-muted);
             display: flex;
@@ -616,7 +615,6 @@
             width: 1.5rem; height: 1.5rem; border-radius: 50%;
             background: var(--geo-purple); color: #FFF;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: 900;
             box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
         }
 
@@ -674,7 +672,10 @@
                     <div class="pulse-dot"></div>
                     <span>Auto-Sync Active (10s)</span>
                 </div>
-                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">☀️</button>
+                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
             </div>
         </nav>
     </div>
@@ -682,7 +683,10 @@
     <!-- Main Container -->
     <main class="container">
         <header class="dashboard-header">
-            <div class="header-tag">⚡ Track 5 · Real-time Operational Telemetry</div>
+            <div class="header-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Track 5 · Real-time Operational Telemetry</span>
+            </div>
             <h1>Complaint Triage & SLA Dashboard</h1>
             <p>Automated AI categorization, sentiment extraction & background queue escalation monitoring</p>
         </header>
@@ -692,35 +696,45 @@
             <div class="stat-card" style="--stat-accent: var(--geo-purple)">
                 <div class="stat-label">
                     <span>Total Submissions</span>
-                    <span class="stat-icon-bg">📊</span>
+                    <span class="stat-icon-bg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </span>
                 </div>
                 <div class="stat-value" id="stat-total">0</div>
             </div>
             <div class="stat-card" style="--stat-accent: var(--text-muted)">
                 <div class="stat-label">
                     <span>Received</span>
-                    <span class="stat-icon-bg">📥</span>
+                    <span class="stat-icon-bg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 14.76 4H9.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                    </span>
                 </div>
                 <div class="stat-value" id="stat-received">0</div>
             </div>
             <div class="stat-card" style="--stat-accent: var(--geo-cyan)">
                 <div class="stat-label">
                     <span>In Progress</span>
-                    <span class="stat-icon-bg">⚙️</span>
+                    <span class="stat-icon-bg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </span>
                 </div>
                 <div class="stat-value" id="stat-progress" style="color: var(--geo-cyan)">0</div>
             </div>
             <div class="stat-card" style="--stat-accent: var(--geo-orange)">
                 <div class="stat-label">
                     <span>Escalated</span>
-                    <span class="stat-icon-bg">🚨</span>
+                    <span class="stat-icon-bg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </span>
                 </div>
                 <div class="stat-value" id="stat-escalated" style="color: var(--geo-orange)">0</div>
             </div>
             <div class="stat-card" style="--stat-accent: var(--geo-green)">
                 <div class="stat-label">
                     <span>Resolved</span>
-                    <span class="stat-icon-bg">✓</span>
+                    <span class="stat-icon-bg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
                 </div>
                 <div class="stat-value" id="stat-resolved" style="color: var(--geo-green)">0</div>
             </div>
@@ -730,11 +744,14 @@
         <div class="table-card">
             <div class="table-toolbar">
                 <div class="search-wrapper">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </span>
                     <input type="text" id="search-box" class="search-input" placeholder="Search by customer, ID, category..." onkeyup="filterTable()">
                 </div>
                 <div class="toolbar-hint">
-                    <span>💡 Click any complaint row to inspect AI extraction & draft response</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>Click any complaint row to inspect AI extraction & draft response</span>
                 </div>
             </div>
 
@@ -756,7 +773,9 @@
             </table>
 
             <div class="empty-state" id="empty-state">
-                <div style="font-size: 3.5rem; margin-bottom: 1rem;">📭</div>
+                <div style="display: flex; justify-content: center; margin-bottom: 1.25rem;">
+                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-light);"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 14.76 4H9.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                </div>
                 <h3 style="color: var(--text-main); margin-bottom: 0.5rem; font-family: var(--ff-heading); font-size: 1.5rem;">No Complaints Found</h3>
                 <p>Submit a complaint from the intake portal to watch live AI triage processing.</p>
                 <br>
@@ -770,7 +789,9 @@
         <div class="modal">
             <div class="modal-header">
                 <h3 class="modal-title" id="modal-title">Workflow Audit Trail</h3>
-                <button class="close-btn" onclick="closeAuditModal()">&times;</button>
+                <button class="close-btn" onclick="closeAuditModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
             <div id="modal-content">Loading timeline...</div>
         </div>
@@ -787,16 +808,28 @@
     <script>
         // Theme Switcher
         const themeBtn = document.getElementById('theme-toggle');
+        const sunIcon = themeBtn.querySelector('.sun-icon');
+        const moonIcon = themeBtn.querySelector('.moon-icon');
         const savedTheme = localStorage.getItem('buildfest_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        applyTheme(savedTheme);
 
         themeBtn.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', nextTheme);
             localStorage.setItem('buildfest_theme', nextTheme);
-            themeBtn.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+            applyTheme(nextTheme);
         });
 
         function timeAgo(dateString) {
@@ -807,10 +840,14 @@
             return `${Math.floor(seconds / 86400)}d ago`;
         }
 
-        function getSentimentEmoji(sentiment) {
-            if (sentiment === 'positive') return '😊';
-            if (sentiment === 'negative') return '😞';
-            return '😐'; 
+        function getSentimentIcon(sentiment) {
+            if (sentiment === 'positive') {
+                return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--geo-green)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`;
+            }
+            if (sentiment === 'negative') {
+                return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--geo-pink)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`;
+            }
+            return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`;
         }
 
         let currentComplaints = [];
@@ -862,16 +899,16 @@
                 const urgencyClass = c.urgency ? `urg-${c.urgency.toLowerCase()}` : 'urg-low';
                 const statusClass = c.status ? `stat-${c.status.toLowerCase()}` : 'stat-received';
 
-                let actionButtons = `<button class="btn-sm btn-audit" onclick="showAuditModal('${c.id}')" title="View audit history">📜 Audit</button>`;
+                let actionButtons = `<button class="btn-sm btn-audit" onclick="showAuditModal('${c.id}')" title="View audit history"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Audit</button>`;
 
                 if (c.status !== 'resolved') {
-                    actionButtons += `<button class="btn-sm btn-resolve" onclick="resolveComplaint('${c.id}')">✓ Resolve</button>`;
+                    actionButtons += `<button class="btn-sm btn-resolve" onclick="resolveComplaint('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Resolve</button>`;
                     if (c.status !== 'escalated') {
-                        actionButtons += `<button class="btn-sm btn-escalate" onclick="escalateComplaint('${c.id}')">🚨 Escalate</button>`;
+                        actionButtons += `<button class="btn-sm btn-escalate" onclick="escalateComplaint('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Escalate</button>`;
                     }
-                    actionButtons += `<button class="btn-sm btn-reassign" onclick="promptReassign('${c.id}', '${c.assigned_to || ''}')">👤 Reassign</button>`;
+                    actionButtons += `<button class="btn-sm btn-reassign" onclick="promptReassign('${c.id}', '${c.assigned_to || ''}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg> Reassign</button>`;
                 } else {
-                    actionButtons += `<span style="color: var(--geo-green); font-size: 0.8rem; font-weight: 800; font-family: var(--ff-heading); padding-left: 0.25rem;">✓ Closed</span>`;
+                    actionButtons += `<span style="color: var(--geo-green); font-size: 0.8rem; font-weight: 800; font-family: var(--ff-heading); padding-left: 0.25rem; display: inline-flex; align-items: center; gap: 0.3rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Closed</span>`;
                 }
 
                 html += `
@@ -880,7 +917,7 @@
                         <td><strong>${c.customer_name || 'Unknown'}</strong><br><small style="color: var(--text-muted);">${c.customer_email || ''}</small></td>
                         <td><span class="badge ${categoryClass}">${c.category || 'Processing...'}</span></td>
                         <td><span class="badge ${urgencyClass}">${c.urgency || 'Low'}</span></td>
-                        <td style="font-size: 1.2rem;" title="Sentiment: ${c.sentiment}">${getSentimentEmoji(c.sentiment)}</td>
+                        <td title="Sentiment: ${c.sentiment}">${getSentimentIcon(c.sentiment)}</td>
                         <td><span class="badge ${statusClass}">${(c.status || 'Received').replace('_', ' ')}</span></td>
                         <td><strong>${c.assigned_to || 'Unassigned'}</strong></td>
                         <td style="color: var(--text-muted); font-size: 0.8125rem;">${timeAgo(c.created_at || new Date())}</td>
@@ -982,7 +1019,9 @@
                 logs.forEach(log => {
                     timelineHtml += `
                         <li class="timeline-item">
-                            <div class="timeline-icon">✓</div>
+                            <div class="timeline-icon">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
                             <div class="timeline-event">${log.event}</div>
                             <div class="timeline-detail">${log.detail || ''}</div>
                             <div class="timeline-time">${new Date(log.created_at).toLocaleString()}</div>

@@ -246,7 +246,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.1rem;
             transition: all 0.2s ease;
         }
 
@@ -354,7 +353,7 @@
             height: 44px;
             background: var(--geo-yellow);
             border-radius: 50%;
-            font-size: 1.4rem;
+            color: #1E1E28;
             box-shadow: 0 6px 16px rgba(255, 199, 44, 0.4);
         }
 
@@ -443,7 +442,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -463,7 +462,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
         /* Form Inputs */
@@ -479,10 +478,6 @@
             margin-bottom: 0.6rem;
             color: var(--text-main);
             letter-spacing: -0.2px;
-        }
-
-        .input-wrapper {
-            position: relative;
         }
 
         input[type="text"],
@@ -558,7 +553,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
             transition: transform 0.3s ease;
         }
 
@@ -599,8 +593,8 @@
 
         .success-badge-container {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             margin: 0 auto 1.5rem;
         }
 
@@ -612,7 +606,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
             color: #FFF;
             box-shadow: 0 16px 40px -10px rgba(0, 208, 132, 0.4);
             animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -727,7 +720,10 @@
             </div>
 
             <div class="nav-actions">
-                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">☀️</button>
+                <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Light/Dark Theme">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
             </div>
         </nav>
     </div>
@@ -741,7 +737,9 @@
                 <span>Track 5 · AI Complaint Automation</span>
             </div>
             <h1 class="hero-title">
-                Automate <span class="inline-geo geo-pill-arrow">→</span> customer complaints <span class="inline-geo geo-cylinder"></span> faster <span class="inline-geo geo-sticker">⚡</span>
+                Automate <span class="inline-geo geo-pill-arrow">→</span> customer complaints <span class="inline-geo geo-cylinder"></span> faster <span class="inline-geo geo-sticker">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </span>
             </h1>
             <p class="hero-subtitle">
                 AI-driven intake pipeline extracting customer sentiment, urgency categories, auto-assigning SLA queues, and executing background escalation.
@@ -762,20 +760,27 @@
                     <!-- Presets Header -->
                     <div class="presets-header">
                         <div class="presets-title">
-                            <span>⚡ Quick Demo Judging Presets</span>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            <span>Quick Demo Judging Presets</span>
                         </div>
                     </div>
                     <div class="preset-pills">
                         <button type="button" class="preset-chip" onclick="loadPreset('billing')">
-                            <span class="preset-icon">💳</span>
+                            <span class="preset-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            </span>
                             <span>Billing Dispute</span>
                         </button>
                         <button type="button" class="preset-chip" onclick="loadPreset('product')">
-                            <span class="preset-icon">💻</span>
+                            <span class="preset-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </span>
                             <span>Product Bug</span>
                         </button>
                         <button type="button" class="preset-chip" onclick="loadPreset('service')">
-                            <span class="preset-icon">📞</span>
+                            <span class="preset-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </span>
                             <span>SLA Timeout</span>
                         </button>
                     </div>
@@ -801,7 +806,9 @@
 
                         <button type="submit" id="submit-btn" class="btn-submit">
                             <span id="btn-text">Submit Complaint</span>
-                            <span class="btn-arrow-circle" id="btn-arrow">→</span>
+                            <span class="btn-arrow-circle" id="btn-arrow">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </span>
                             <div class="spinner" id="btn-spinner"></div>
                         </button>
                     </form>
@@ -810,7 +817,9 @@
                 <!-- Success State -->
                 <div id="success-state">
                     <div class="success-badge-container">
-                        <div class="success-geo-icon">✓</div>
+                        <div class="success-geo-icon">
+                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
                     </div>
                     <h2 style="font-family: var(--ff-heading); font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">Complaint Enqueued!</h2>
                     <p style="color: var(--text-muted); font-size: 1rem; max-width: 440px; margin: 0 auto 1.5rem;">
@@ -824,7 +833,7 @@
 
                     <a href="status.html" class="btn-status-go">
                         <span>Open Triage Dashboard</span>
-                        <span>→</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
                     <button type="button" class="btn-reset-form" onclick="resetForm()">Submit Another Complaint</button>
                 </div>
@@ -870,16 +879,28 @@
 
         // Theme Switcher Logic
         const themeBtn = document.getElementById('theme-toggle');
+        const sunIcon = themeBtn.querySelector('.sun-icon');
+        const moonIcon = themeBtn.querySelector('.moon-icon');
         const savedTheme = localStorage.getItem('buildfest_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        applyTheme(savedTheme);
 
         themeBtn.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', nextTheme);
             localStorage.setItem('buildfest_theme', nextTheme);
-            themeBtn.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+            applyTheme(nextTheme);
         });
 
         // Form Submit Handling
