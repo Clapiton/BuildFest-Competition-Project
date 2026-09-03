@@ -14,7 +14,7 @@ import {
   getAuditLogs,
   supabase,
 } from "./db.js";
-import { complaintQueue, escalationQueue } from "./worker.js";
+import { complaintQueue, escalationQueue, processComplaintDirectly } from "./worker.js";
 import { notifyEscalation, notifyCustomerStatusUpdate, notifyTeamMember } from "./notify.js";
 
 import path from "path";
@@ -335,7 +335,14 @@ app.post("/api/complaints", intakeLimiter, async (req, res) => {
       "received",
       `Complaint received from ${anonymizedIp} [Device: ${deviceId.substring(0, 8)}]`
     );
-    await complaintQueue.add("process-complaint", { complaintId: complaint.id }, { jobId: complaint.id });
+    try {
+      await complaintQueue.add("process-complaint", { complaintId: complaint.id }, { jobId: complaint.id });
+    } catch (qErr: any) {
+      console.warn("⚠️ Could not enqueue to Redis queue (processing directly in background):", qErr?.message);
+      processComplaintDirectly(complaint.id).catch((err) =>
+        console.error("Direct complaint processing error:", err)
+      );
+    }
 
     res.status(201).json({ success: true, complaint });
   } catch (error) {

@@ -5,10 +5,26 @@ import { getComplaint, updateComplaint, logAuditEvent } from "./db.js";
 import { classifyComplaint, fallbackClassification } from "./ai.js";
 import { notifyCustomer, notifyTeamMember, notifyEscalation, notifyCustomerStatusUpdate } from "./notify.js";
 
-const connection = new IORedis(config.redisUrl, { maxRetriesPerRequest: null });
+const connection = new IORedis(config.redisUrl, { 
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+  lazyConnect: true,
+});
+
+connection.on("error", (err) => {
+  console.warn("⚠️ Redis connection error:", err.message);
+});
 
 export const complaintQueue = new Queue("complaint-processing", { connection });
 export const escalationQueue = new Queue("escalation-check", { connection });
+
+complaintQueue.on("error", (err) => {
+  console.warn("⚠️ ComplaintQueue error:", err.message);
+});
+
+escalationQueue.on("error", (err) => {
+  console.warn("⚠️ EscalationQueue error:", err.message);
+});
 
 const ROUTING_TABLE: Record<string, string> = {
   billing: config.supportBillingEmail,
@@ -17,10 +33,8 @@ const ROUTING_TABLE: Record<string, string> = {
   other: config.supportOtherEmail,
 };
 
-const processingHandler = async (job: Job) => {
-  const { complaintId } = job.data;
+export async function processComplaintDirectly(complaintId: string) {
   const complaint = await getComplaint(complaintId);
-  
   if (!complaint) {
     throw new Error(`Complaint ${complaintId} not found`);
   }
@@ -29,11 +43,7 @@ const processingHandler = async (job: Job) => {
   try {
     classification = await classifyComplaint(complaint.raw_message);
   } catch (error) {
-    if (job.attemptsMade >= (job.opts.attempts ?? 1) - 1) {
-      classification = fallbackClassification();
-    } else {
-      throw error;
-    }
+    classification = fallbackClassification();
   }
 
   const assignee = ROUTING_TABLE[classification.category] || ROUTING_TABLE.other;
@@ -63,21 +73,33 @@ const processingHandler = async (job: Job) => {
   });
   await logAuditEvent(complaintId, "email_sent", `Assignment notice email sent to ${assignee}`);
 
-  await escalationQueue.add(
-    "check-escalation",
-    { complaintId: complaint.id },
-    {
-      jobId: `escalation-${complaint.id}`,
-      delay: config.escalationDelayMs,
-    }
-  );
+  try {
+    await escalationQueue.add(
+      "check-escalation",
+      { complaintId: complaint.id },
+      {
+        jobId: `escalation-${complaint.id}`,
+        delay: config.escalationDelayMs,
+      }
+    );
+  } catch (escErr: any) {
+    console.warn("⚠️ Could not queue escalation job to Redis:", escErr?.message);
+  }
 
   console.log(`✅ Complaint ${complaint.id} processed: ${classification.category} / ${classification.urgency} → ${assignee}`);
+}
+
+const processingHandler = async (job: Job) => {
+  const { complaintId } = job.data;
+  await processComplaintDirectly(complaintId);
 };
 
 const processingWorker = new Worker("complaint-processing", processingHandler, {
   connection,
   concurrency: 5,
+  drainDelay: 30, // Conserves requests: check queue every 30s when idle
+  stalledInterval: 300000, // Check for stalled jobs every 5 mins instead of 30s
+  lockDuration: 60000,
 });
 
 processingWorker.on("completed", (job) => {
@@ -86,6 +108,10 @@ processingWorker.on("completed", (job) => {
 
 processingWorker.on("failed", (job, err) => {
   console.error(`Job ${job?.id} failed:`, err);
+});
+
+processingWorker.on("error", (err) => {
+  console.warn("⚠️ Processing worker error:", err.message);
 });
 
 const escalationHandler = async (job: Job) => {
@@ -116,10 +142,17 @@ const escalationHandler = async (job: Job) => {
 
 const escalationWorker = new Worker("escalation-check", escalationHandler, {
   connection,
+  drainDelay: 30,
+  stalledInterval: 300000,
+  lockDuration: 60000,
+});
+
+escalationWorker.on("error", (err) => {
+  console.warn("⚠️ Escalation worker error:", err.message);
 });
 
 export function startWorkers(): void {
-  console.log("👷 BullMQ workers started");
+  console.log("👷 BullMQ workers started (optimized polling: 30s drain delay, 5m stalled check)");
   console.log(`⏱️  Escalation delay: ${config.escalationDelayMs / 1000}s`);
 }
 
